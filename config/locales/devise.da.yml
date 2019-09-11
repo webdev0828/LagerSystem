@@ -1,0 +1,59 @@
+# Additional translations at https://github.com/plataformatec/devise/wiki/I18n
+
+da:
+  errors:
+    messages:
+      expired: "er udløbet. Vær venlig at bede om en ny"
+      not_found: "ikke fundet"
+      already_confirmed: "er allerede bekræftet"
+      not_locked: "var ikke låst"
+      not_saved:
+        one: "1 fejl medførte at denne %{resource} ikke kunne gemmes:"
+        other: "%{count} fejl medførte at denne %{resource} ikke kunne gemmes:"
+
+  devise:
+    failure:
+      already_authenticated: 'Du er allerede logget ind.'
+      unauthenticated: 'Du skal logge ind for at kunne fortsætte.'
+      unconfirmed: 'Du skal bekræfte din konto for at kunne fortsætte.'
+      locked: 'Din konto er låst.'
+      invalid: 'Login eller kodeord er ikke gyldigt.'
+      invalid_token: 'Ugyldig token til autorisering.'
+      timeout: 'Din session er udløbet. Log ind igen for at kunne fortsætte.'
+      inactive: 'Din konto er ikke bekræftet.'
+      not_found_in_database: 'Login eller kodeord er ikke gyldigt.'
+      last_attempt: Du har ét forsøg mere, inden din konto vil blive låst.
+    sessions:
+      signed_in: 'Du er nu logget ind.'
+      signed_out: 'Du er nu logget ud.'
+    passwords:
+      send_instructions: 'Du vil om et øjeblik modtage en email vedrørende nulstilling af kodeord.'
+      updated: 'Dit kodeord er ændret og du er nu logget ind.'
+      updated_not_active: 'Dit kodeord er ændret.'
+      send_paranoid_instructions: 'Hvis din e-mail adresse findes i vores database vil du modtage et link til hvor du kan nulstille dit kodeord.'
+    confirmations:
+      send_instructions: 'Om få minutter vil du modtage en email med instruktioner om aktivering af din konto.'
+      send_paranoid_instructions: 'Hvis din e-mail adresse findes i vores database vil du modtage en e-mail med instruktioner om hvordan du kan aktivere din konto.'
+      confirmed: 'Din konto er aktiveret og du er nu logget ind.'
+    registrations:
+      signed_up: 'Din registrering er godkendt.'
+      signed_up_but_unconfirmed: 'En besked med bekræftelses link er blevet sendt til din email adresse. Åbn venligst linket for at aktivere din konto.'
+      signed_up_but_inactive: 'Din registrering er godkendt, men vi kunne ikke logge dig ind, da din konto endnu ikke er blevet aktiveret.'
+      signed_up_but_locked: 'Din registrering er godkendt, men vi kunne ikke logge dig ind, da din konto er låst.'
+      updated: 'Din profil er opdateret.'
+      update_needs_confirmation: "Din profil er opdateret, men du skal bekræfte din nye email adresse. Klik på linket for at bekræfte."
+      destroyed: 'Farvel. Din konto er nu lukket.'
+    unlocks:
+      send_instructions: 'Om få minutter vil du modtage en email med instruktioner om genåbning af din konto.'
+      unlocked: 'Din konto er genåbnet og du er nu logget ind.'
+      send_paranoid_instructions: 'Hvis din e-mail adresse findes i vores database vil du modtage in e-mail med instutioner om hvordan du kan låse din konto op.'
+    omniauth_callbacks:
+      success: 'Du er nu logget ind med din %{kind} konto.'
+      failure: 'Du kunne ikke logges ind med din %{kind} konto.'
+    mailer:
+      confirmation_instructions:
+        subject: 'jnlager.dk - Aktivering af brugerkonto'
+      reset_password_instructions:
+        subject: 'jnlager.dk - Nulstil kodeord'
+      unlock_instructions:
+        subject: 'jnlager.dk - Genaktivering af brugerkonto'

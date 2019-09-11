@@ -1,0 +1,8 @@
+staging:
+  adapter: mysql2
+  encoding: utf8
+  database: lager_staging
+  pool: 5
+  username: root
+  password: z3x52d5m5t2v
+

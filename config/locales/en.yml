@@ -1,0 +1,17 @@
+# Sample localization file for English. Add more files in this directory for other locales.
+# See http://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
+
+en:
+  date:
+    formats:
+      special: "%d-%m-%Y"
+
+  activerecord:
+    attributes:
+      user:
+        login: "Username or email"
+
+  view:
+    notes:
+      edit_warning: ""
+      new_warning: ""

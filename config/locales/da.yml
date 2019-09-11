@@ -1,0 +1,430 @@
+# Danish translation file for standard Ruby on Rails internationalization
+# by Lars Hoeg (larshoeg@gmail.com, http://www.lenio.dk/)
+
+da:
+
+  view:
+    notes:
+      edit_warning: "Du er ved at opdatere en note til en færdiggjort optællingsperiode.\n\nEr du sikker?"
+      new_warning: "Du er ved at oprette en note til en færdiggjort optællingsperiode.\n\nEr du sikker?"
+
+  will_paginate:
+      next_label: næste →
+      page_gap: ! '&hellip;'
+      previous_label: ← forrige
+
+  account_table:
+    number: 'Varenr.'
+    batch: 'Lot'
+    name: 'Varenavn'
+    trace: 'Trace'
+    pallet_type: 'Type'
+    capacity: 'Antal pr. palle'
+    best_before: 'M.H.T.'
+    weight: 'Vægt (kg)'
+    primo: 'Primo'
+    incoming: 'Indgang'
+    outgoing: 'Afgang'
+    scrap: 'Pluk'
+    ultimo: 'Ultimo'
+
+    count: 'Korr. Antal'
+
+  order_states:
+    editing: "Under oprettelse"
+    submitted: "Oprettet"
+    processing: "Under udførsel"
+    ready: "Klar"
+    finished: "Afhentet"
+
+  order_states_customer:
+    editing: "Under oprettelse"
+    submitted: "Oprettet"
+    processing: "Under udførsel"
+    ready: "Klar til afhentning"
+    finished: "Afhentet"
+
+  # active_support
+  date:
+    # See http://sproget.dk/svarbase/SV00000046/ and http://en.wikipedia.org/wiki/Date_formats
+    # either use traditional (2.10.03, 2. oktober 2003): "%e.%m.%y", "%e. %B %Y"
+    # or international ISO 8601 format (2003-10-20): "%Y-%m-%d"
+    # Note: some Windows distributions do not support %e - you may have to use %d instead
+    formats:
+      default: "%e. %B %Y"
+      short: "%e. %b %Y"
+      long: "%e. %B %Y"
+      special: "%d-%m-%Y"
+
+    day_names:
+      - søndag
+      - mandag
+      - tirsdag
+      - onsdag
+      - torsdag
+      - fredag
+      - lørdag
+    abbr_day_names:
+      - sø
+      - ma
+      - ti
+      - 'on' # Note: unescaped 'on' is parsed as true
+      - to
+      - fr
+      - lø
+    month_names:
+      - ~
+      - januar
+      - februar
+      - marts
+      - april
+      - maj
+      - juni
+      - juli
+      - august
+      - september
+      - oktober
+      - november
+      - december
+    abbr_month_names:
+      - ~
+      - jan
+      - feb
+      - mar
+      - apr
+      - maj
+      - jun
+      - jul
+      - aug
+      - sep
+      - okt
+      - nov
+      - dec
+    order:
+      - :day
+      - :month
+      - :year
+
+  time:
+    formats:
+      default: "%e. %B %Y, %H:%M"
+      short: "%e. %b %Y, %H:%M"
+      long: "%A, %e. %B %Y, %H:%M"
+    am: ""
+    pm: ""
+
+  support:
+    array:
+      # Rails 2.2
+      #sentence_connector: "og"
+      #skip_last_comma: true
+      # Rails 2.3
+      words_connector: ", "
+      two_words_connector: " og "
+      last_word_connector: " og "
+    select:
+      # default value for :prompt => true in FormOptionsHelper
+      prompt: "Vælg..."
+
+  # action_view
+  number:
+    format:
+      separator: ","
+      delimiter: "."
+      precision: 3
+      significant: false
+      strip_insignificant_zeros: false
+
+    currency:
+      format:
+        format: "%u %n"
+        unit: "DKK"
+        separator: ","
+        delimiter: "."
+        precision: 2
+        significant: false
+        strip_insignificant_zeros: false
+
+    percentage:
+      format:
+        delimiter: ""
+
+    precision:
+      format:
+        separator: ","
+        delimiter: "."
+        precision: 2
+        significant: false
+        strip_insignificant_zeros: false
+
+    human:
+      format:
+        delimiter: ""
+        precision: 3
+        significant: true
+        strip_insignificant_zeros: true
+      # Rails 2.2
+      #storage_units: [Bytes, KB, MB, GB, TB]
+      # Rails 2.3
+      storage_units:
+        # Storage units output formatting.
+        # %u is the storage unit, %n is the number (default: 2 MB)
+        format: "%n %u"
+        units:
+          byte:
+            one:   "Byte"
+            other: "Bytes"
+          kb: "KB"
+          mb: "MB"
+          gb: "GB"
+          tb: "TB"
+      decimal_units:
+        format: "%n %u"
+        units:
+          unit: ""
+          thousand: Tusind
+          million: Million
+          billion: Milliard
+          trillion: Billion
+          quadrillion: Billiard
+
+  datetime:
+    distance_in_words:
+      half_a_minute: "et halvt minut"
+      less_than_x_seconds:
+        one:   "mindre end et sekund"
+        other: "mindre end %{count} sekunder"
+      x_seconds:
+        one:   "et sekund"
+        other: "%{count} sekunder"
+      less_than_x_minutes:
+        one:   "mindre end et minut"
+        other: "mindre end %{count} minutter"
+      x_minutes:
+        one:   "et minut"
+        other: "%{count} minutter"
+      about_x_hours:
+        one:   "cirka en time"
+        other: "cirka %{count} timer"
+      x_days:
+        one:   "en dag"
+        other: "%{count} dage"
+      about_x_months:
+        one:   "cirka en måned"
+        other: "cirka %{count} måneder"
+      x_months:
+        one:   "en måned"
+        other: "%{count} måneder"
+      about_x_years:
+        one:   "cirka et år"
+        other: "cirka %{count} år"
+      over_x_years:
+        one:   "mere end et år"
+        other: "mere end %{count} år"
+      almost_x_years:
+        one:   "næsten et år"
+        other: "næsten %{count} år"
+    prompts:
+      year:   "År"
+      month:  "Måned"
+      day:    "Dag"
+      hour:   "Time"
+      minute: "Minut"
+      second: "Sekund"
+
+  helpers:
+    select:
+      prompt: "Vælg..."
+    label:
+      pallet:
+        number: "Varenr."
+        batch: "Lot"
+        trace: "Trace"
+        count: "Antal"
+
+    submit:
+      create: "Opret %{model}"
+      update: "Opdater %{model}"
+      submit: "Gem %{model}"
+
+  errors:
+    format: "%{attribute} %{message}"
+
+    messages: &errors_messages
+      inclusion: "er ikke i listen"
+      exclusion: "er reserveret"
+      invalid: "er ikke gyldig"
+      confirmation: "stemmer ikke overens med aktiveringsnøjle"
+      accepted: "skal accepteres"
+      empty: "må ikke udelades"
+      blank: "skal udfyldes"
+      too_long: "er for lang (maksimum %{count} tegn)"
+      too_short: "er for kort (minimum %{count} tegn)"
+      wrong_length: "har forkert længde (skulle være %{count} tegn)"
+      not_a_number: "er ikke et tal"
+      not_an_integer: "er ikke et heltal"
+      greater_than: "skal være større end %{count}"
+      greater_than_or_equal_to: "skal være større end eller lig med %{count}"
+      equal_to: "skal være lig med %{count}"
+      less_than: "skal være mindre end %{count}"
+      less_than_or_equal_to: "skal være mindre end eller lig med %{count}"
+      odd: "skal være ulige"
+      even: "skal være lige"
+      not_found: "ikke fundet"
+      already_confirmed: "var allerede aktiveret"
+      not_locked: "var ikke låst"
+      extension_white_list_error: 'er ikke af korrekt format'
+
+  activerecord:
+    models:
+      organized_storage: "lager"
+      bulk_storage: "lager"
+      customer: "kunde"
+      order: "ordre"
+      pallet: "palle"
+      pallet_type: "palle type"
+      user: "bruger"
+      arrival: indgang
+      reservation: reservation
+      arrangement: aftale
+      customer_group: kundegruppe
+      order_import: ordre import
+
+    attributes:
+      organized_storage:
+        name: "Navn"
+      bulk_storage:
+        name: "Navn"
+      customer:
+        name: "Kundenavn"
+        subname: "Beskrivelse"
+        number: "Kundenr."
+        address: "Adresse"
+        phone: "Telefon"
+        fax: "Fax"
+        email: "Email"
+        deactivated: "Deaktiveret"
+
+      order:
+        customer: Kunde
+        number: "Ordrenr."
+        load_at: "Læssedato"
+        deliver_at: "Leveringsdato"
+        destination_name: "Modtager id"
+        destination_address: "Modtager"
+        delivery: Levering
+        state: "Status"
+        owner: "Oprettet af"
+        note: "Note"
+
+      customer_group:
+        customers: Kunder
+
+      order_import:
+        customer_group: Kundegruppe
+        file: Tekstfil
+        number: "Ordrenr."
+        load_at: "Læssedato"
+        deliver_at: "Leveringsdato"
+        destination_name: "Modtager id"
+        destination_address: "Modtager"
+        delivery: Levering
+        state: "Status"
+        owner: "Oprettet af"
+        note: "Note"
+
+      pallet:
+        name: 'Varenavn'
+        number: 'Varenr.'
+        batch: 'Lot'
+        trace: 'Trace'
+        pallet_type_id: 'Type'
+        pallet_type: 'Type'
+        count: 'Antal'
+        original_count: 'Antal ved ingang'
+        reserved: 'Reserveret'
+        taken: 'Plukket'
+        capacity: 'Antal pr. palle'
+        weight: 'Vægt (kg)'
+        best_before: 'M.H.T.'
+        arrived_at: 'Indgangsdato'
+        position: 'Lokation'
+        customer: 'Ejer'
+
+      pallet_correction:
+        pallet_type_id: "Palletype"
+        pallet_type: "Type"
+        available: "Antal"
+        capacity: "Antal pr. palle"
+        weight: "Vægt (kg)"
+
+      user:
+        login: "Brugernavn eller email"
+        current_password: "Nuværende kodeord"
+        username: "Brugernavn"
+        full_name: "Fulde navn"
+        email: "Email"
+        phone: "Telefon"
+        password: "Kodeord"
+        password_confirmation: "Gentag kodeord"
+        role: "Rolle"
+        department_ids: "Adgang"
+
+        roles:
+          admin: "Administrator"
+          default: "Bruger"
+          customer: "Kunde"
+
+      arrival:
+        name: 'Varenavn'
+        number: 'Varenr.'
+        batch: 'Lot'
+        trace: 'Trace'
+        pallet_type_id: 'Type'
+        pallet_type: 'Type'
+        count: 'Antal'
+        capacity: 'Antal pr. palle'
+        weight: 'Vægt (kg)'
+        best_before: 'M.H.T.'
+        arrived_at: 'Indgangsdato'
+        customer: 'Ejer'
+        temperature: 'Temperatur'
+        original_capacity: 'Antal ved indgang'
+        pallet_count: 'Paller'
+
+      reservation:
+        count: 'Antal'
+
+      interval:
+        from: 'Fra'
+        to: 'Til'
+
+      arrangement:
+        use_scrap: 'Vis pluk'
+        use_pallet_counts: 'Vis palleantal'
+        use_weight: 'Vis vægt'
+        use_scrap_minimum: 'Vis min. pluk'
+        scrap_minimum: 'Min. pluk'
+        minimum_scrap_weight: 'Min. pluk (vægt)'
+
+    errors:
+      template:
+        header:
+          one: "En fejl forhindrede %{model} i at blive gemt"
+          other: "%{count} fejl forhindrede %{model} i at blive gemt"
+        body: "Der var problemer med følgende felter:"
+
+      messages:
+        overwrite_protected: "Det oprindelige data er forældet"
+        taken: "er allerede i brug"
+        record_invalid: "Validering fejlede: %{errors}"
+        <<: *errors_messages
+
+      full_messages:
+        format: "%{attribute}%{message}"
+
+      models:
+        pallet_correction:
+          attributes:
+            available:
+              greater_than_capacity: "må ikke være større end Antal pr. palle"
