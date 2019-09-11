@@ -1,0 +1,6 @@
+---
+BUNDLE_PATH: "/home/jnsandbox02/lagersystem/shared/bundle"
+BUNDLE_DISABLE_SHARED_GEMS: "true"
+BUNDLE_FROZEN: "1"
+BUNDLE_JOBS: "4"
+BUNDLE_WITHOUT: "development:test"
