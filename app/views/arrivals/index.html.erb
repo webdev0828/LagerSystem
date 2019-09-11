@@ -1,0 +1,28 @@
+<h1>Indgange <%= sep %> <%= @customer.name %></h1>
+
+<div class="form_container">
+  <%= form_tag department_customer_arrivals_path(@department, @customer), :method => :get, :id => 'filter_arrivals' do %>
+  <table class="form">
+    <tr>
+      <td><label for="number">Varenr.</label></td>
+      <td><%= text_field_tag :number, params[:number] %></td>
+    </tr>
+    <tr>
+      <td><label for="batch">Lot</label></td>
+      <td><%= text_field_tag :batch, params[:batch] %></td>
+    </tr>
+    <tr>
+      <td><label for="trace">Trace</label></td>
+      <td><%= text_field_tag :trace, params[:trace] %></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td class="submit"><%= submit_tag 'Søg', :name => nil %></td>
+    </tr>
+  </table>
+<% end %>
+</div>
+
+<div id="arrivals">
+  <%= render :partial => 'arrivals' %>
+</div>

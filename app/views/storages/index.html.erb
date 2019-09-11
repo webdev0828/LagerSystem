@@ -1,0 +1,12 @@
+<h1>Lagre</h1>
+<div id="storages" class="list sortable-list" data-sortable-url="<%= sort_department_storages_path(@department) %>">
+<% @storages.each do |storage| %>
+  <a data-id="<%= storage.id %>" class="list-item <%= storage_type(storage) %>" href="<%= url_for [@department, storage] %>">
+    <span class="handle">flyt</span>
+    <h3><%= storage.name %></h3>
+  </a>
+<% end %>
+</div>
+<div class="controls">
+  <%= link_to 'Nyt bulk lager', [:new, @department, :bulk_storage] %>
+</div>

@@ -1,0 +1,32 @@
+<h1>Imports <%= sep %> <%= @customer_group.name %></h1>
+
+<div id="order_imports">
+  <%= will_paginate @order_imports, :params => {:anchor => 'order_imports'} %>
+
+  <table class="listing">
+    <tr>
+      <th>Import dato</th>
+      <th>Ordrenr.</th>
+      <th>Modtager id</th>
+      <th>Læssedato</th>
+      <th>Leveringsdato</th>
+      <th>Antal varer</th>
+      <th>Antal ordrer</th>
+    </tr>
+
+    <% @order_imports.each do |order_import| %>
+      <tr class="<%= cycle('odd','even') %> clickable" data-url="<%= url_for [@department, @customer_group, order_import] %>">
+        <td><%= l order_import.created_at %></td>
+        <td><%= order_import.number %></td>
+        <td><%= order_import.destination_name %></td>
+        <td><%= l order_import.load_at %></td>
+        <td><%= l order_import.deliver_at %></td>
+        <td><%= order_import.orders.to_a.sum { |o| o.reservations.to_a.sum(&:count) } %></td>
+        <td><%= order_import.orders.to_a.size %></td>
+      </tr>
+    <% end %>
+
+  </table>
+
+  <%= will_paginate @order_imports, :params => {:anchor => 'order_imports'} %>
+</div>

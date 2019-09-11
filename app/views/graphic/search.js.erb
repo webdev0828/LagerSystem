@@ -1,0 +1,2 @@
+$.highlight(<%= @ids.map(&:to_i).to_json.html_safe %>);
+$.notify('<%= escape_javascript pluralize(@ids.size, 'palle', 'paller') %> fundet.');

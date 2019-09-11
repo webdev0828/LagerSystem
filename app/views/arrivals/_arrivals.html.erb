@@ -1,0 +1,33 @@
+<%= will_paginate @arrivals, :params => {:anchor => 'arrivals'} %>
+
+<table class="listing">
+  <tr>
+    <th><%= Arrival.attr_name(:number) %></th>
+    <th><%= Arrival.attr_name(:name) %></th>
+    <th><%= Arrival.attr_name(:batch) %></th>
+    <th><%= Arrival.attr_name(:trace) %></th>
+    <th><%= Arrival.attr_name(:pallet_count) %></th>
+    <th><%= Arrival.attr_name(:capacity) %></th>
+    <th><%= Arrival.attr_name(:original_capacity) %></th>
+    <th><%= Arrival.attr_name(:temperature) %></th>
+    <th><%= Arrival.attr_name(:arrived_at) %></th>
+    <th><%= Arrival.attr_name(:best_before) %></th>
+  </tr>
+
+<% @arrivals.each do |arrival| %>
+  <tr class="clickable <%= cycle("odd","even") %> clickable" data-url="<%= url_for [@department, @customer, arrival] %>">
+    <td><%= arrival.number %></td>
+    <td><%= arrival.name %></td>
+    <td><%= arrival.batch %></td>
+    <td><%= arrival.trace %></td>
+    <td class="number"><%= number_with_delimiter arrival.pallet_count %></td>
+    <td class="number"><%= number_with_delimiter arrival.capacity %></td>
+    <td class="number"><%= number_with_delimiter arrival.count %></td>
+    <td class="number"><%= number_with_precision arrival.temperature %><%= "&deg;".html_safe if arrival.temperature %></td>
+    <td><%= l arrival.arrived_at.to_date, :format => :short %></td>
+    <td><%= l arrival.best_before, :format => :short %></td>
+  </tr>
+<% end %>
+</table>
+
+<%= will_paginate @arrivals, :params => {:anchor => 'arrivals'} %>

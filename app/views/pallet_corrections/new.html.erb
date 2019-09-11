@@ -1,0 +1,43 @@
+<h1>Korriger palle <%= sep %> <%= @customer.name %></h1>
+
+<%= form_errors(@pallet_correction) %>
+
+<div class="form_container">
+<%= protected_form_for [@department, @customer, @pallet, @pallet_correction] do |f| %>
+  <table class="form">
+    <tr>
+      <td>
+        <%= f.label :pallet_type_id %>
+        <div class="description">Nu: <%= @pallet.pallet_type.name %></div>
+      </td>
+      <td><%= f.select :pallet_type_id, PalletType.options_for_select %></td>
+    </tr>
+    <tr>
+      <td>
+        <%= f.label :available %>
+        <div class="description">Nu: <%= @pallet.available %><%= " (#{@pallet.reserved} reserveret)" if @pallet.reserved > 0 %></div>
+      </td>
+      <td><%= f.text_field :available %></td>
+    </tr>
+    <tr>
+      <td>
+        <%= f.label :capacity %>
+        <div class="description">Nu: <%= @pallet.capacity %></div>
+      </td>
+      <td><%= f.text_field :capacity %></td>
+    </tr>
+    <tr>
+      <td>
+        <%= f.label :weight %>
+        <div class="description">Nu: <%= number_with_precision @pallet.weight %> kg</div>
+      </td>
+      <td><%= f.localized_number_field :weight %></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td class="submit"><%= f.submit "Korriger palle" %> eller <%= link_to 'gå tilbage', [@department, @customer, @pallet] %></td>
+    </tr>
+  </table>
+<% end %>
+</div>
+

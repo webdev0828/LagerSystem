@@ -1,0 +1,34 @@
+<h1>Brugere</h1>
+<% @groups.each do |role, users| %>
+  <% next if users.size == 0 %>
+  <h2><%= t("activerecord.attributes.user.roles.#{role}") %></h2>
+  <div id="users" class="list">
+  <% users.each do |user| %>
+    <a class="list-item <%= "deactivated" if user.access_locked? %>" href="<%= url_for user %>">
+      <h3><%= user.full_name %></h3>
+      <table>
+        <tr>
+          <td>Brugernavn</td>
+          <td><%= user.username %></td>
+        </tr>
+        <% if user.role != 'customer' and not user.department_ids.empty? %>
+        <tr>
+          <td>Afdelinger</td>
+          <td><%= user.department_ids.map { |id| @department_labels[id] }.join ", " %></td>
+        </tr>
+        <% end %>
+        <% unless user.customer_ids.empty? %>
+        <tr>
+          <td>Kundeadgang</td>
+          <td><%= user.customer_ids.map { |id| @customer_labels[id] }.join ", " %></td>
+        </tr>
+        <% end %>
+      </table>
+    </a>
+  <% end %>
+  </div>
+<% end %>
+
+<div class="controls">
+  <%= link_to 'Ny bruger', new_user_path %>
+</div>

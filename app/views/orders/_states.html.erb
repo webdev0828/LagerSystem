@@ -1,0 +1,7 @@
+<div class="order-state-buttons">
+  <%= link_to_state :editing, [:change, @department, @customer, @order], confirm: ("Du er igang med at tage kontrollen fra en anden bruger (#{@order.owner.try(:full_name)}).\n\nVil du fortsætte?" if @order.locked_for? current_user ) %>
+  <%= link_to_state :submitted, [:submit, @department, @customer, @order] %>
+  <%= link_to_state :processing, [:carry_out, @department, @customer, @order] %>
+  <%= link_to_state :ready, [:mark_ready, @department, @customer, @order], confirm: ("Vær opmærksom på at ordren har en note:\n\n#{@order.note}" unless @order.note.blank?) %>
+  <%= link_to_state :finished, [:finish, @department, @customer, @order], confirm: "Du er igang med at afslutte ordren? Denne handling kan ikke fortrydes.\n\nVil du fortsætte?" %>
+</div>

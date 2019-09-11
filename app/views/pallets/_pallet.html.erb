@@ -1,0 +1,61 @@
+<table class="information">
+  <tr class="first clickable" data-url="<%= escape_javascript url_for([@department, @pallet.customer]) %>">
+    <td><%= Pallet.attr_name :customer %></td>
+    <td><%= @pallet.customer.name %></td>
+  </tr>
+  <tr>
+    <td><%= Pallet.attr_name :number %></td>
+    <td><%= @pallet.number %></td>
+  </tr>
+  <% @pallet.each_human_name_and_value :batch, :name, :trace do |n, v| %>
+    <tr>
+      <td><%= n %></td>
+      <td><%= v %></td>
+    </tr>
+  <% end %>
+  <tr>
+    <td><%= Pallet.attr_name :pallet_type %></td>
+    <td><%= @pallet.pallet_type.name %></td>
+  </tr>
+  <tr>
+    <td><%= Pallet.attr_name :capacity %></td>
+    <td><%= @pallet.capacity %></td>
+  </tr>
+  <tr>
+    <td><%= Pallet.attr_name :count %></td>
+    <td><%= @pallet.available %><%= " (#{@pallet.reserved} reserveret)" if @pallet.reserved > 0%></td>
+  </tr>
+  <tr>
+    <td>Antal ved indgang</td>
+    <td><%= @pallet.original_count %> <%= "(#{@pallet.difference_count > 0 ? "+#{@pallet.difference_count}" : @pallet.difference_count} korrigeret)" unless @pallet.difference_count == 0 %></td>
+  </tr>
+  <tr>
+    <td><%= Pallet.attr_name :weight %></td>
+    <td><%= number_with_precision @pallet.weight %> kg</td>
+  </tr>
+  <tr>
+    <td><%= Pallet.attr_name :arrived_at %></td>
+    <td><%= date_with_words @pallet.arrived_at %></td>
+  </tr>
+  <tr>
+    <td><%= Pallet.attr_name :best_before %></td>
+    <td><%= date_with_words @pallet.best_before, true %></td>
+  </tr>
+  <% if @pallet.deleted_at.nil? %>
+  <tr class="clickable" data-url="<%= escape_javascript url_for_position(@pallet.position, @pallet.id) %>">
+    <td><%= Pallet.attr_name :position %></td>
+    <td><%= @pallet.position.position_name %></td>
+  </tr>
+  <% else %>
+  <tr>
+    <td>Tømt</td>
+    <td><%= l @pallet.deleted_at.to_date %></td>
+  </tr>
+  <% end %>
+  <% if local_assigns[:show_pallet_link] %>
+  <tr class="clickable" data-url="<%= escape_javascript url_for([@department, @pallet.customer, @pallet]) %>">
+    <td></td>
+    <td>Vis palle</td>
+  </tr>
+  <% end %>
+</table>

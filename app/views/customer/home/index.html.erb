@@ -1,0 +1,9 @@
+<h1>Adgange</h1>
+<div id="departments" class="list">
+<% @customers.each do |customer| %>
+  <a class="list-item" href="<%= url_for [:customer, customer, :orders] %>">
+    <h3><%= customer.name %> (<%= customer.department.label %>)</h3>
+    Kundenr.: <%= customer.number %>
+  </a>
+<% end %>
+</div>

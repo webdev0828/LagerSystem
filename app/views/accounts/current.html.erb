@@ -1,0 +1,66 @@
+<h1>Løbende optælling</h1>
+
+<table class="information">
+  <tr>
+    <td>Kunde</td>
+    <td><%= @customer.name %></td>
+  </tr>
+  <tr>
+    <td>Fra</td>
+    <td><%= l @interval.from, :format => :long %></td>
+  </tr>
+  <tr>
+    <td>Til</td>
+    <td><%= l @interval.to, :format => :long %></td>
+  </tr>
+</table>
+
+<div id="notes">
+  <%= render @notes %>
+  <%= render :partial => 'notes/note_form', :locals => { :note => @customer.notes.build } %>
+</div>
+
+<div class="controls">
+  <a href="javascript:void(0)" class="fn-note-new">Ny note</a>
+</div>
+
+<%= render :partial => 'current', :locals => { :table_class => 'active' } %>
+
+<div class="controls">
+  <%= link_to 'Ny optælling', [:new, @department, @customer, :interval] %>
+</div>
+
+<h2>Udskrifter</h2>
+<div class="arrow-links fn-track-pageviews">
+  &rarr; <%= link_to 'Lagerliste', current_list_department_customer_intervals_path(@department, @customer, :format => :pdf), :target => :_blank %><br>
+  &rarr; <%= link_to 'Lagerliste (vægt)', current_list_weight_department_customer_intervals_path(@department, @customer, :format => :pdf), :target => :_blank %><br>
+  &rarr; <%= link_to 'CSV liste', current_list_department_customer_intervals_path(@department, @customer, :format => :csv), :target => :_blank %><br>
+  &rarr; <%= link_to 'CSV liste (vægt)', current_list_weight_department_customer_intervals_path(@department, @customer, :format => :csv), :target => :_blank %><br>
+  &rarr; <%= link_to 'Excel liste', current_list_department_customer_intervals_path(@department, @customer, :format => :xls), :target => :_blank %><br>
+</div>
+<br />
+<% if @intervals.size > 0 %>
+  <h2>Seneste optællinger</h2>
+  <div class="list">
+  <% @intervals.each do |interval| %>
+    <a class="list-item" href="<%= url_for [@department, @customer, interval] %>">
+      <h3><%= "Uge %{week} - %{year}" % interval.week_info %></h3>
+      <table>
+        <tr>
+          <td><%= Interval.attr_name :from %>:</td>
+          <td><%= l interval.from, :format => :long %></td>
+        </tr>
+        <tr>
+          <td><%= Interval.attr_name :to %>:</td>
+          <td><%= l interval.to, :format => :long %></td>
+        </tr>
+      </table>
+    </a>
+  <% end %>
+  </div>
+  <% if @more %>
+    <div class="controls">
+      <%= link_to 'Vis alle', [@department, @customer, :intervals] %>
+    </div>
+  <% end %>
+<% end %>

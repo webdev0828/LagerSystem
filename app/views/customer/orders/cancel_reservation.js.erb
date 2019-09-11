@@ -1,0 +1,21 @@
+<% if @reservation.destroyed? %>
+    var pallet = $('#pallet_<%= @reservation.id %>');
+    var reservation = pallet.closest('.reservation');
+    var siblings = pallet.siblings('.pallet');
+
+    if( siblings.length ){
+
+        var newCount = 0;
+        pallet.siblings('.pallet').each(function(){
+            newCount += $(this).data('count');
+        });
+        reservation.find('.header .count strong').html(newCount);
+        pallet.remove();
+
+    } else {
+        reservation.remove();
+    }
+
+<% else %>
+    $.notify('Der skete en ukendt fejl. Prøv igen eller kontakt en administrator.', { type: 'alert' });
+<% end %>

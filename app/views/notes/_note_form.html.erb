@@ -1,0 +1,8 @@
+<div class="note-form<%= ' note-form-new' if note.new_record? %>" style="display:none">
+  <%= form_for [@department, @customer, note], :remote => true do |f| %>
+      <%= f.text_area :content, :id => nil, :class => 'autogrow' %><br>
+      <div class="submit">
+        <%= f.submit :id => nil %> eller <a href="javascript:void(0)" class="fn-note-cancel cancel">annuller</a>
+      </div>
+  <% end %>
+</div>

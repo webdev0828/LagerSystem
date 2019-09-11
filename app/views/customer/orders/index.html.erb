@@ -1,0 +1,28 @@
+<h1>Ordrebakke</h1>
+<% Order.aasm.states.map(&:name).each do |state|
+  next unless @order_groups.key?(state) %>
+
+  <h2><%= @labels[state] || t("order_states_customer.#{state}") %></h2>
+  <div id="orders_<%= state %>" class="list">
+    <% @order_groups[state].each do |order| %>
+      <a class="list-item" href="<%= url_for [:customer, order.customer, order] %>">
+        <h3>Ordrenr. <%= order.number %></h3>
+        <table>
+          <tr>
+            <td>Kunde:</td>
+            <td><%= order.customer.name %></td>
+          </tr>
+          <tr>
+            <td>Modtager:</td>
+            <td><%= order.destination_name %></td>
+          </tr>
+          <tr>
+            <td>Læssedato:</td>
+            <td><%= l order.load_at %></td>
+          </tr>
+        </table>
+      </a>
+    <% end %>
+  </div>
+
+<% end %>

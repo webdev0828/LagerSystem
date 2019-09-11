@@ -1,0 +1,18 @@
+<h1>Optællinger</h1>
+<div class="list">
+<% @intervals.each do |interval| %>
+  <a class="list-item" href="<%= url_for [@department, @customer, interval] %>">
+    <h3><%= "uge %{week} - %{year}" % interval.week_info %></h3>
+    <table>
+      <tr>
+        <td><%= Interval.attr_name :from %>:</td>
+        <td><%= l interval.from, :format => :long %></td>
+      </tr>
+      <tr>
+        <td><%= Interval.attr_name :to %>:</td>
+        <td><%= l interval.to, :format => :long %></td>
+      </tr>
+    </table>
+  </a>
+<% end %>
+</div>

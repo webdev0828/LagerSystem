@@ -1,0 +1,33 @@
+<h1>Udskrifter <%= sep %> <%= @customer.name %></h1>
+<h2>Klik for at markere til print & afslutning</h2>
+
+<div id="print_ready" class="list selectable-list">
+  <% @orders.each do |order| %>
+      <div class="list-item selected" data-order-id="<%= order.id %>">
+        <table>
+        <h3>Ordrenr. <%= order.number %></h3>
+          <tr>
+            <td>Læssedato:</td>
+            <td><%= l order.load_at %></td>
+          </tr>
+          <tr>
+            <td>Leveringsdato:</td>
+            <td><%= l order.deliver_at %></td>
+          </tr>
+          <tr>
+            <td>Modtager:</td>
+            <td><%= order.destination_name %></td>
+          </tr>
+        </table>
+      </div>
+  <% end %>
+</div>
+
+<div class="controls">
+  <a href="javascript:void(0)" id="mark_all_ready_orders">Marker alle</a> <%= sep %>
+  <a href="javascript:void(0)" id="unmark_all_ready_orders">Fjern markeringer</a> <%= sep %>
+  <%= link_to 'Print markerede', all_order_pdfs_department_customer_orders_path(@department, @customer), id: "pdf_generation_link", format: 'pdf', target: '_blank' %>
+</div>
+
+<%= javascript_include_tag "print-ready-orders" %>
+

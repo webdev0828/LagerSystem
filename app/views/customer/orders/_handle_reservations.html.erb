@@ -1,0 +1,31 @@
+<h2>Tilføj emner</h2>
+
+<div class="form_container">
+  <%= form_for :pallet, :url => search_pallets_customer_customer_orders_path(@customer), :remote => true, :html => { :method => :get, :id => 'search_pallets' } do |f| %>
+    <table class="form">
+      <tr>
+        <td><%= f.label :number %></td>
+        <td><%= f.text_field :number, :class => 'focus-on-load' %></td>
+      </tr>
+      <tr>
+        <td><%= f.label :batch %></td>
+        <td><%= f.text_field :batch %></td>
+      </tr>
+      <tr>
+        <td><%= f.label :trace %></td>
+        <td><%= f.text_field :trace %></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td class="submit"><%= f.submit 'Søg' %></td>
+      </tr>
+    </table>
+  <% end %>
+</div>
+
+<div id="selection_info" style="display:none" class="search-information">
+  <%= link_to 'Tilføj valgte', '#', :id => 'add_to_order', :class => 'add_selected', :data => { :reserve => reserve_customer_customer_order_path(@customer, @order), :reload => customer_customer_order_path(@customer, @order) } %>
+  <div class="label">Antal valgte: <strong>0</strong></div>
+</div>
+<div id="search_result" class="list selectable-list search-results"></div>
+<div id="search_result_count"></div>

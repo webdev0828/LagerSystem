@@ -1,0 +1,15 @@
+<a id="toggle_customer_<%= customer.id %>" data-id="<%= customer.id %>" data-label="<%= j customer.name + ' (' + customer.department.label + ')' %>" data-remote="true" data-method="put" class="list-item-customer list-item<%= " selected" if @user.customer_ids.include?(customer.id) %>" href="<%= toggle_customer_user_path @user, customer %>">
+  <h3><%= customer.name %></h3>
+  <table>
+    <% unless customer.subname.blank? %>
+        <tr>
+          <td>Beskrivelse</td>
+          <td><%= customer.subname %></td>
+        </tr>
+    <% end %>
+    <tr>
+      <td>Kundenr.</td>
+      <td><%= customer.number %></td>
+    </tr>
+  </table>
+</a>

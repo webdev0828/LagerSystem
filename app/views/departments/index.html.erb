@@ -1,0 +1,9 @@
+<h1>Afdelinger</h1>
+<div id="departments" class="list">
+<% @departments.each do |department| %>
+  <a class="list-item" href="<%= url_for [department, :customers] %>">
+    <h3><%= department.label %></h3>
+    <%= department.name %>
+  </a>
+<% end %>
+</div>

@@ -1,0 +1,132 @@
+<table class="listing <%= table_class %>">
+  <tr>
+    <th><%= t "account_table.number" %></th>
+    <th><%= t "account_table.batch" %></th>
+    <th><%= t "account_table.name" %></th>
+    <th><%= t "account_table.trace" %></th>
+    <th><%= t "account_table.pallet_type" %></th>
+    <th><%= t "account_table.capacity" %></th>
+    <th><%= t "account_table.best_before" %></th>
+    <th><%= t "account_table.weight" %></th>
+    <th class="lborder"><%= t "account_table.primo" %></th>
+    <th>(pll.)</th>
+    <th class="lborder"><%= t "account_table.incoming" %></th>
+    <th>(pll.)</th>
+    <th class="lborder"><%= t "account_table.outgoing" %></th>
+    <th class="lborder"><%= t "account_table.scrap" %></th>
+    <th>(heraf min.)</th>
+    <th class="lborder"><%= t "account_table.ultimo" %></th>
+    <th>(pll.)</th>
+  </tr>
+
+  <% @interval.data.each do |row| %>
+
+    <tr class="<%= cycle('odd','even') %>">
+      <td><%= row["number"] %></td>
+      <td><%= row["batch"] %></td>
+      <td><%= row["name"] %></td>
+      <td><%= row["trace"] %></td>
+      <td class="center"><%= row["pallet_type_name"] %></td>
+      <td class="center"><%= row["capacity"] %></td>
+      <td class="right"><%= l row["best_before"].to_date, :format => :special %></td>
+      <td class="right"><%= number_with_precision row["weight"] %></td>
+      <td class="lborder right"><%= number_with_delimiter row["primo"] %></td>
+      <td class="right"><%= "#{number_with_delimiter row["primo_pallets"]} pll." if row["primo_pallets"].present? %></td>
+      <td class="lborder right"><%= number_with_delimiter row["incoming"] %></td>
+      <td class="right"><%= "#{number_with_delimiter row["incoming_pallets"]} pll." if row["incoming_pallets"].present? %></td>
+      <td class="lborder right"><%= number_with_delimiter row["outgoing"] %></td>
+      <td class="lborder right"><%= number_with_delimiter row["scrap"] %></td>
+      <td class="right"><%= number_with_delimiter row["scrap_min"] if row["scrap_min"].to_i > 0 %></td>
+      <td class="lborder right"><%= number_with_delimiter row["ultimo"] %></td>
+      <td class="right"><%= "#{number_with_delimiter row["ultimo_pallets"].to_i} pll." if row["ultimo_pallets"].present? %></td>
+    </tr>
+
+  <% end %>
+
+</table>
+
+<h2>Total</h2>
+<table class="listing <%= table_class %>" style="float:left;margin-right:10px">
+  <tr>
+    <th></th>
+    <th>Lagerleje</th>
+    <th>Handling</th>
+    <th>Pluk (inkl. min.)</th>
+    <th>Min. pluk</th>
+  </tr>
+  <% reset_cycle %>
+  <% @interval.sums.each do |sum| %>
+  <tr class="<%= cycle('odd','even') %>">
+    <td class="left"><%= sum['typename'] %></td>
+    <td class="right"><%= number_with_delimiter sum['primo'] + sum['incoming'] %> pll.</td>
+    <td class="right"><%= number_with_delimiter sum['handling'] %> pll.</td>
+    <td class="right"><%= number_with_delimiter sum['scrap'] %> krt.</td>
+    <td class="right"><%= number_with_delimiter sum['scrap_min'] %> krt.</td>
+  </tr>
+  <% end %>
+  <tr class="<%= cycle('odd','even') %> total">
+    <td>Total:</td>
+    <td class="right"><%= number_with_delimiter @interval.sums.inject(0){|m,n| m + n['primo'] + n['incoming'] } %> pll.</td>
+    <td class="right"><%= number_with_delimiter @interval.sums.inject(0){|m,n| m + n['handling'] } %> pll.</td>
+    <td class="right"><%= number_with_delimiter @interval.sums.inject(0){|m,n| m + n['scrap'] } %> krt.</td>
+    <td class="right"><%= number_with_delimiter @interval.sums.inject(0){|m,n| m + n['scrap_min'] } %> krt.</td>
+  </tr>
+</table>
+
+<table class="listing <%= table_class %>">
+  <tr>
+    <th></th>
+    <th>Lagerleje</th>
+    <th>Handling</th>
+    <th>Pluk (inkl. min.)</th>
+    <th>Min. pluk</th>
+  </tr>
+  <% reset_cycle %>
+  <% @interval.sums.each do |sum| %>
+  <tr class="<%= cycle('odd','even') %>">
+    <td class="left"><%= sum['typename'] %></td>
+    <td class="right"><%= number_with_precision sum['primo_weight'] + sum['incoming_weight'] %> kg</td>
+    <td class="right"><%= number_with_precision sum['handling_weight'] %> kg</td>
+    <td class="right"><%= number_with_precision sum['scrap_weight'] %> kg</td>
+    <td class="right"><%= number_with_precision sum['scrap_min_weight'] %> kg</td>
+  </tr>
+  <% end %>
+  <tr class="<%= cycle('odd','even') %> total">
+    <td>Total:</td>
+    <td class="right"><%= number_with_precision @interval.sums.inject(0){|m,n| m + n['primo_weight'] + n['incoming_weight'] } %> kg</td>
+    <td class="right"><%= number_with_precision @interval.sums.inject(0){|m,n| m + n['handling_weight'] } %> kg</td>
+    <td class="right"><%= number_with_precision @interval.sums.inject(0){|m,n| m + n['scrap_weight'] } %> kg</td>
+    <td class="right"><%= number_with_precision @interval.sums.inject(0){|m,n| m + n['scrap_min_weight'] } %> kg</td>
+  </tr>
+</table>
+
+<% if @interval.corrections.size > 0 %>
+<h2>Korrektioner</h2>
+<table class="listing <%= table_class %>">
+  <tr>
+    <th><%= t "account_table.number" %></th>
+    <th><%= t "account_table.batch" %></th>
+    <th><%= t "account_table.name" %></th>
+    <th><%= t "account_table.trace" %></th>
+    <th><%= t "account_table.best_before" %></th>
+    <th><%= t "account_table.pallet_type" %></th>
+    <th><%= t "account_table.capacity" %></th>
+    <th><%= t "account_table.weight" %></th>
+    <th><%= t "account_table.count" %></th>
+  </tr>
+  <% reset_cycle %>
+  <% @interval.corrections.each do |o| %>
+  <tr class="<%= cycle('odd','even') %>">
+    <td><%= o["number"] %></td>
+    <td><%= o["batch"] %></td>
+    <td><%= o["name"] %></td>
+    <td><%= o["trace"] %></td>
+    <td><%= l o['best_before'], :format => :special %></td>
+    <td><%= correction_label(o, "pallet_type_name") %></td>
+    <td><%= correction_label(o, "capacity") %></td>
+    <td><%= correction_label(o, "weight") { |e| number_with_precision e } %></td>
+    <td><%= correction_relative_count(o) %></td>
+  </tr>
+  <% end %>
+</table>
+<% end %>

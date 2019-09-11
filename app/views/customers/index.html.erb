@@ -1,0 +1,25 @@
+<h1>Kunder</h1>
+<div id="customers" class="list sortable-list hide-deactivated" data-sortable-url="<%= sort_department_customers_path(@department) %>">
+<% @customers.each do |customer| %>
+  <a data-id="<%= customer.id %>" class="list-item<%= " deactivated" if customer.deactivated %>" href="<%= url_for [@department, customer] %>">
+    <span class="handle">flyt</span>
+    <h3><%= customer.name %></h3>
+    <table>
+      <% unless customer.subname.blank? %>
+      <tr>
+        <td>Beskrivelse</td>
+        <td><%= customer.subname %></td>
+      </tr>
+      <% end %>
+      <tr>
+        <td>Kundenr.</td>
+        <td><%= customer.number %></td>
+      </tr>
+    </table>
+  </a>
+<% end %>
+</div>
+<div class="controls">
+  <%= link_to 'Ny kunde', [:new, @department, :customer] %> <%= sep %>
+  <a href="javascript:void(0)" class="fn-toggle-deactivated-customers" data-on="Skjul deaktiverede kunder" data-off="Vis deaktiverede kunder" data-selector="#customers">Vis deaktiverede kunder</a>
+</div>

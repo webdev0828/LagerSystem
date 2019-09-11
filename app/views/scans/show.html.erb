@@ -1,0 +1,64 @@
+<h1>Import</h1>
+<script type="text/javascript" charset="utf-8">
+
+	function import_table( id, _this ){
+		var rows = $("#" + id + " tr.import-ready");
+
+		$btn = $(_this);
+
+		$.ajax({
+			url: "<%= url_for([@department, @customer, :scan]) %>",
+			type: "post",
+			data: {
+				_method:'PUT',
+				objects: rows.map(function(){
+					return $(this).data("import");
+				}).get()
+			},
+			success: function(data){
+				if( data.ok ){
+					rows.removeClass("import-ready").addClass("import-done");
+					$.notify("Import udført.");
+				}
+			},
+			error: function(){
+				$.notify("Fejl i import.", { type: "alert" });
+			},
+
+			beforeSend: function(){ $btn.attr('disabled', true); },
+			complete:   function(){ $btn.removeAttr('disabled'); }
+		});
+		return false;
+	}
+</script>
+<% @sheets.each_with_index do |sheet,uid| %>
+	<h2><%= sheet[:name] %></h2>
+	<% if sheet[:items].is_a?(Array) %>
+		<%= sheet[:error] %>
+		<table class="listing" id="<%= "import_#{uid}" %>">
+			<% sheet[:items].each do |item|
+				pallet = item[:pallet]
+				trace = pallet.try(:trace)
+				batch = pallet.try(:batch)
+
+				type = item[:error].nil? ? (item[:in_sync] ? "done" : "ready") : "error"
+				%>
+				<tr class="<%= cycle("even", "odd") %> import-<%= type %>" data-import="<%= item.reject { |k,v| ! [:trace, :batch, :pallet_id].include?(k) }.to_json %>">
+
+					<td><%= type %></td>
+					<td><%= "#{item[:error]}" if item[:error] %></td>
+					<td><%= link_to "Palle", [@department, pallet.customer, pallet] if pallet %></td>
+					<td><%= item[:trace] %></td>
+					<td><%= item[:batch] %></td>
+					<% item[:row].each do |cell| %>
+						<td><%= cell %></td>
+					<% end %>
+				</tr>
+			<% end %>
+		</table>
+		<input class="submit_import" onclick="return import_table('<%= "import_#{uid}" %>', this);" type="button" value="Indlæs <%= sheet[:name] %>" />
+
+
+	<% end %>
+<% end %>
+

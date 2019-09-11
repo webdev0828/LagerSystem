@@ -1,0 +1,11 @@
+<h1>Kundegrupper</h1>
+<div id="customer_groups" class="list">
+  <% @customer_groups.each do |customer_group| %>
+    <a class="list-item" href="<%= url_for [@department, customer_group] %>">
+      <h3><%= customer_group.name %></h3>
+      <% customer_group.customers.each do |customer| %>
+        <%= customer.name %><br>
+      <% end %>
+    </a>
+  <% end %>
+</div>

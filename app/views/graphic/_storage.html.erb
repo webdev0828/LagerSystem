@@ -1,0 +1,12 @@
+<% if storage.is_a?(OrganizedStorage)  %>
+  <%= render "organized_storage", :organized_storage => storage %>
+<% elsif storage.is_a?(BulkStorage) %>
+  <%= render "bulk_storage", :bulk_storage => storage %>
+<% else %>
+  <div class="storage_panel">
+    <div class="titlebar" style="margin-bottom:0px">
+      <a href="javascript:void(0)" class="switch_button">&rarr;</a>
+      <div class="title">Intet lager valgt</div>
+    </div>
+  </div>
+<% end %>

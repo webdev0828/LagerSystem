@@ -1,0 +1,75 @@
+<div id="menu" class="<%= Rails.env %>" >
+
+  <%= menu_item "Forside", root_url %>
+
+  <% if can? :manage, User %>
+    <%= menu_item "Brugere", users_path %>
+
+    <% if controller_name == 'users' %>
+      <div class="ruler"></div>
+      <%= menu_item "Ny bruger", new_user_path %>
+    <% end %>
+
+  <% end %>
+
+  <% if @department %>
+    <strong><%= @department.label %></strong>
+    <%= menu_item 'Kunder', [@department, :customers] %>
+    <%= menu_item 'Lagre', [@department, :storages] %>
+    <%= menu_item_switch 'Grafisk oversigt', department_graphic_path(@department), controller.class == GraphicController %>
+    <%= menu_item 'Ordrebakke', [@department, :order_tray] %>
+    <%= menu_item 'Ordrearkiv', [@department, :order_history] %>
+    <%= menu_item 'Kundegrupper', [@department, :customer_groups] unless @department.customer_groups.empty? %>
+  <% end %>
+
+  <% if controller_name == 'customers' and action_name == 'index' %>
+	<strong>Kontrol</strong>
+	<%= menu_item 'Ny kunde', [:new, @department, :customer] %>
+  <% end %>
+
+  <% unless @customer_group.nil? %>
+    <strong><%= @customer_group.name %></strong>
+    <%= menu_item 'Varer på lager', pallets_department_customer_group_path(@department, @customer_group) %>
+    <%= menu_item 'Import historik', department_customer_group_order_imports_path(@department, @customer_group) %>
+    <div class="ruler"></div>
+    <%= menu_item 'Import', department_customer_group_path(@department, @customer_group) %>
+  <% end %>
+
+  <% unless @department.nil? or @customer.nil? or @customer.new_record? %>
+    <strong><%= @customer.name %></strong>
+    <%= menu_item 'Oversigt', [@department, @customer] %>
+    <div data-no-turbolink>
+      <%= menu_item 'Optælling', [:current, @department, @customer, :intervals] %>
+    </div>
+    <%= menu_item 'Indgange', [@department, @customer, :arrivals] %>
+    <%= menu_item 'Varer på lager', [@department, @customer, :pallets] %>
+    <%= menu_item 'Ordreoversigt', [@department, @customer, :orders] %>
+    <div data-no-turbolink data-turbolinks="false">
+      <%= menu_item 'Udskrifter', ready_department_customer_orders_path(@department, @customer) %>
+    </div>
+    <div class="ruler"></div>
+    <%= menu_item 'Indgang', [:new, @department, @customer, :arrival] %>
+    <%= menu_item 'Ny ordre', [:new, @department, @customer, :order] %>
+    <%= menu_item 'Afslut flere ordre', mark_department_customer_orders_path(@department,@customer) %>
+  <% end %>
+
+  <% unless @bulk_storage.nil? or @bulk_storage.new_record? %>
+    <strong><%= @bulk_storage.name %></strong>
+    <%= menu_item 'Oversigt', [@department, @bulk_storage] %>
+    <%= menu_item 'Grafisk oversigt', department_graphic_path(@department, :id_a => @department.lobby_id, :id_b => @bulk_storage.id ) %>
+  <% end %>
+
+  <% unless @organized_storage.nil? or @organized_storage.new_record? %>
+    <strong><%= @organized_storage.name %></strong>
+    <%= menu_item 'Oversigt', [@department, @organized_storage] %>
+    <%= menu_item 'Vis grafisk', department_graphic_path(@department, :id_a => @department.lobby_id, :id_b => @organized_storage.id) %>
+  <% end %>
+
+  <% if controller.class == GraphicController %>
+    <strong>Kontrol</strong>
+    <%= menu_item_switch 'Skift pladser', department_graphic_path(@department, :id_a => @storage_b.id, :shelf_a => @type_b == 'orga' ? @storage_b.choosen_shelf : nil,
+                                                                               :id_b => @storage_a.id, :shelf_b => @type_a == 'orga' ? @storage_a.choosen_shelf : nil), false if @storage_a and @storage_b %>
+    <%= link_to 'Nulstil søgning', department_graphic_path(@department, :id_a => params[:id_a], :shelf_a => params[:shelf_a], :id_b => params[:id_b], :shelf_b => params[:shelf_b]), :class => "menu_link" %>
+  <% end %>
+
+</div>

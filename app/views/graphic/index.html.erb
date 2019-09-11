@@ -1,0 +1,68 @@
+<h1>Grafisk oversigt</h1>
+<div id="graphic-storage-panels" data-info-url="<%= department_graphic_info_path(@department) %>" data-move-url="<%= department_graphic_move_path(@department) %>" data-graphic-url="<%= department_graphic_path(@department) %>">
+    <%= render 'storage', :storage => @storage_a %>
+    <div></div>
+    <%= render 'storage', :storage => @storage_b %>
+</div>
+
+<script id="change-graphic-storage-dialog" type="text/template">
+    <div id="change-graphic-storage">
+        <div class="dialog-header">
+            Skift til lager
+        </div>
+        <form onsubmit="return false" class="fn-change-storage">
+            <table class="form" style="margin:10px;">
+                <tr>
+                    <td>Vælg lager</td>
+                    <td><select name="storage" id="storage_select" class="wide_select"><%= @storages.inject('') { |m,e| "#{m}<option value='#{e[0]}' rel='#{e[2]}'>#{e[1]}</option>\n" }.html_safe %></select></td>
+                </tr>
+                <tr id="shelf_row" style="display:none">
+                    <td>Vælg reol</td>
+                    <td><%= select_tag 'shelf', nil, :id => 'shelf_select', :class => 'wide_select' %></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="submit">
+                        <input type="submit" value="Skift" class="submit" />
+                        eller
+                        <a href="javascript:void(0)" class="fn-overlay-close">annullér</a>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</script>
+
+
+<h2>Søg på paller</h2>
+<div class="form_container">
+  <%= form_tag department_graphic_search_path(@department, @options_for_url), :remote => true, :method => :get, :id => 'search_grids' do %>
+    <table class="form">
+      <tr>
+        <td>Kunde</td>
+        <td><%= select_tag 'customer_id', options_from_collection_for_select(@customers, :id, :name), :class => 'wide_select' %></td>
+      </tr>
+      <tr>
+        <td>Varenr.</td>
+        <td><%= text_field_tag 'number', '' %></td>
+      </tr>
+      <tr>
+        <td>Lot</td>
+        <td><%= text_field_tag 'batch', '' %></td>
+      </tr>
+      <tr>
+        <td>Trace</td>
+        <td><%= text_field_tag 'trace', '' %></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td class="submit">
+          <%= submit_tag 'Søg' %> eller <a href="javascript:void(0)" class="reset-grid-search">Nulstil</a>
+        </td>
+      </tr>
+    </table>
+  <% end %>
+</div>
+
+<div id="show_pallet">
+</div>

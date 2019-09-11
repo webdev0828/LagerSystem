@@ -1,0 +1,14 @@
+<div id="menu" class="<%= Rails.env %>" >
+
+    <%= menu_item 'Forside', customer_root_url %>
+
+    <% if @customer %>
+        <strong><%= @customer.name %> (<%= @customer.department.label %>)</strong>
+        <%= menu_item 'Ordrebakke', [:customer, @customer, :orders] %>
+        <%= menu_item 'Ordrearkiv', [:finished, :customer, @customer, :orders] %>
+        <%= menu_item 'Varer på lager', [:customer, @customer, :pallets] %>
+        <div class="ruler"></div>
+        <%= menu_item 'Ny ordre', new_customer_customer_order_path(@customer) %>
+    <% end %>
+
+</div>

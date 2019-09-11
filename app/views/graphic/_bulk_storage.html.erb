@@ -1,0 +1,15 @@
+<% rows = [(bulk_storage.pallets.count / 30.to_f).ceil + 1, 5].max %>
+<div class="storage_panel" data-storage="<%= bulk_storage.id %>">
+
+  <div class="titlebar">
+    <a href="javascript:void(0)" class="switch_button">&rarr;</a>
+    <div class="title"><%= bulk_storage.name %></div>
+  </div>
+
+  <div class="bulk_storage_grid storage_grid" data-storage="<%= bulk_storage.id %>" data-position-id="<%= bulk_storage.id %>" data-position-type="<%= bulk_storage.class.base_class.to_s %>" style="width:631px;height:<%= rows * 26 + 1 %>px;">
+    <% bulk_storage.pallets.each do |p| %>
+      <div id="pallet_<%= p.id %>" data-pallet-id="<%= p.id %>" class="pallet<%= " wide" if p.wide? %><%= " scrap" if p.scrap? %>" style="width:20px;height:25px"></div>
+    <% end %>
+  </div>
+
+</div>

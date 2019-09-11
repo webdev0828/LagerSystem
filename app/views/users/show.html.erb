@@ -1,0 +1,72 @@
+<h1>Bruger <%= sep %> <%= @user.full_name %> <%= "(deaktiveret)" if @user.access_locked? %></h1>
+<table class="information">
+  <% @user.each_human_name_and_value :email, :username, :full_name, :phone do |n, v| %>
+    <tr>
+      <td class="label"><%= n %></td>
+      <td><%= v %></td>
+    </tr>
+  <% end %>
+  <tr>
+    <td class="label"><%= User.attr_name(:role) %></td>
+    <td><%= t "activerecord.attributes.user.roles.#{@user.role}" %></td>
+  </tr>
+</table>
+
+<div class="controls">
+
+  <% unless @user.access_locked? %>
+    <%= link_to 'Log ind', [:become, @user], method: :put, data: { confirm: "Du er igang med at logge ind som #{@user.full_name}\n\nVil du fortsætte?" } %>
+    <%= sep %>
+  <% end %>
+
+  <%= link_to 'Rediger', [:edit, @user] %>
+
+  <% unless current_user == @user %>
+
+    <%= sep %>
+
+    <% if @user.access_locked? %>
+      <%= link_to 'Genaktivér', [:unlock, @user], :method => :put %>
+    <% else %>
+      <%= link_to 'Deaktivér', [:lock, @user], :method => :put, :data => { :confirm => "Brugeren vil ikke længere kunne logge ind.\n\nVil du fortsætte?" } %>
+    <% end %>
+
+    <%= sep %>
+
+    <%= link_to 'Slet', [@user], :method => :delete, :data => { :confirm => "Er du sikker?" } %>
+
+  <% end %>
+</div>
+
+<% if @user.sign_in_count == 0 %>
+<div class="arrow-links">
+    &rarr; <%= link_to 'Send velkomstmail', [:mail, @user], :method => :put %>
+</div>
+<% end %>
+
+<br>
+
+<% if @user.is? :customer %>
+  <h2>Adgange til kunder</h2>
+  <p>Hvilke kunder denne bruger skal have adgang til?</p>
+  <br>
+  <div id="customers" class="list selectable-list">
+    <% @customer_groups.each do |department, customers| %>
+      <h3><%= department.label %></h3>
+      <% customers.each do |customer| %>
+        <%= render 'customer', customer: customer, locals: { customer: customer } %>
+      <% end %>
+    <% end %>
+  </div>
+<% else %>
+  <h2>Adgange til afdelinger</h2>
+  <p>Hvilke afdelinger skal denne bruger kunne arbejde med?</p>
+  <br>
+  <div id="departments" class="list selectable-list">
+    <% Department.all.each do |department| %>
+        <%= render 'department', department: department, locals: { department: department } %>
+    <% end %>
+  </div>
+<% end %>
+
+

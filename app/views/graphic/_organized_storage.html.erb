@@ -1,0 +1,35 @@
+<div class="storage_panel" data-storage="<%= organized_storage.id %>" data-shelf="<%= organized_storage.choosen_shelf %>">
+
+  <div class="titlebar">
+    <a href="javascript:void(0)" class="switch_button">&rarr;</a>
+    <div class="title">
+      <%= organized_storage.name %>
+      <span class="sep">~</span>
+      Reol: <%= organized_storage.choosen_shelf %>
+      <span class="cursor_position" style="display:none">
+        <span class="sep">~</span>
+        Række: <span class="column"></span>
+        <span class="sep">~</span>
+        Sal: <span class="floor"></span>
+      </span>
+    </div>
+  </div>
+
+  <% os = organized_storage %>
+  <div class="organized_storage_grid storage_grid" data-storage="<%= os.id %>" data-shelf="<%= os.choosen_shelf %>" style="width:<%= (os.max_column + 1) * 21 + 1 %>px;height:<%= (os.max_floor + 1) * 26 + 1 %>px;">
+    <% (1..os.max_column).each do |i| %>
+      <div class="grid_element grid_label" style="bottom:<%= 0 * 26 + 1 %>px;left:<%= i * 21 + 1 %>px;"><%= i %></div>
+    <% end %>
+    <% (1..os.max_floor).each do |i| %>
+      <div class="grid_element grid_label" style="bottom:<%= i * 26 + 1 %>px;left:<%= 0 * 21 + 1 %>px;"><%= i %></div>
+    <% end %>
+    <% os.ordered_placements.each do |p| %>
+    <div id="placement_<%= p.id %>" class="grid_element placement<%= ' hidden-placement' if p.hidden %>" data-placement-id="<%= p.id %>" data-position-id="<%= p.id %>" data-position-type="<%= p.class.base_class.to_s %>" data-column="<%= p.column %>" data-floor="<%= p.floor %>" style="<%= "bottom:#{p.floor * 26 +1}px;left:#{p.column * 21 + 1}px" %>;">
+        <% if p.pallet %>
+          <div id="pallet_<%= p.pallet.id %>" data-pallet-id="<%= p.pallet.id %>" class="pallet<%= " wide" if p.pallet.wide? %><%= " scrap" if p.pallet.scrap? %>"></div>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+
+</div>

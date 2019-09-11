@@ -1,0 +1,43 @@
+<% if @user.errors.empty? %>
+
+var department_ids = <%= @user.department_ids.to_json %>;
+var departments = $('#departments').find(".list-item");
+var department_labels = [];
+
+var customer_ids = <%= @user.customer_ids.to_json %>;
+var customers = $('#customers').find(".list-item");
+var customer_labels = [];
+
+departments.each(function() {
+    var selected = $.inArray($(this).data('id'), department_ids) != -1;
+    if( selected ) department_labels.push($(this).data('label'));
+    $(this).toggleClass('selected', selected);
+});
+
+customers.each(function() {
+    var selected = $.inArray($(this).data('id'), customer_ids) != -1;
+    if( selected ) customer_labels.push($(this).data('label'));
+    $(this).toggleClass('selected', selected);
+});
+
+var message = [];
+if( department_labels.length > 0 ){
+    message.push("<b>Adgang til afdelinger:</b>");
+    message.push.apply(message, department_labels);
+}
+
+if( customer_labels.length > 0 ){
+    if( message.length > 0 ) message.push("");
+    message.push("<b>Adgang til kunder:</b>");
+    message.push.apply(message, customer_labels);
+}
+
+$.notify(message.join("<br>") || "Ingen agdange valgt");
+
+<% else %>
+
+$.notify("Der skete en ukendt fejl.<br>Kontakt administrator.", { type: 'alert'} );
+
+<% end %>
+
+

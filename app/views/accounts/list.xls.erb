@@ -1,0 +1,260 @@
+<%
+
+#-------------#
+#   Formats   #
+#-------------#
+h1     = Spreadsheet::Format.new( :weight => :bold, :size => 18 )
+h2     = Spreadsheet::Format.new( :weight => :bold, :italic => true, :size => 14 )
+bold   = Spreadsheet::Format.new( :weight => :bold )
+text   = Spreadsheet::Format.new( :number_format => "@" )
+textr  = Spreadsheet::Format.new( :number_format => "@", :align => :right )
+number = Spreadsheet::Format.new( :number_format => "#,##0" )
+float  = Spreadsheet::Format.new( :number_format => "#,##0.00" )
+date   = Spreadsheet::Format.new( :number_format => "dd\\-mm\\-yyyy;@" )
+time   = Spreadsheet::Format.new( :number_format => "dd\\-mm\\-yyyy\\ hh:mm;@" )
+
+
+book = Spreadsheet::Workbook.new
+
+#----------#
+#   Info   #
+#----------#
+
+info = book.create_worksheet :name => "Info"
+
+y = 0
+
+info[y,0] = @customer.name
+info.row(y).set_format(0, h1)
+
+y += 1
+
+info[y,0] = "#{@interval.week_label}#{" - foreløbig" if @interval.new_record?}"
+info.row(y).set_format(0, bold)
+
+y += 2
+
+info[y,0] = "Fra:"
+info[y,1] = @interval.from
+info.row(y).set_format(1, time)
+
+y += 1
+
+info[y,0] = "Til:"
+info[y,1] = @interval.to
+info.row(y).set_format(1, time)
+
+
+info.column(0).width = 15
+info.column(1).width = 20
+
+
+#------------#
+#   Status   #
+#------------#
+
+status      = book.create_worksheet :name => 'Status'
+
+column_titles = [
+  'Varenr.',
+  'Lot',
+  'Varenavn',
+  'Trace',
+  "Antal pr. pll.",
+  'Type',
+  'M.H.T.',
+  "Vægt (kg) pr. krt.",
+  'Primo',
+  '(pll.)',
+  'Ind',
+  '(pll.)',
+  'Ud',
+  'Pluk',
+  '(heraf min.)',
+  'Ultimo',
+  '(pll.)'
+]
+
+column_formats = [
+  text,
+  text,
+  text,
+  text,
+  number,
+  text,
+  date,
+  float,
+  number,
+  number,
+  number,
+  number,
+  number,
+  number,
+  number,
+  number,
+  number
+]
+
+y = 0
+
+status.row(y).concat( column_titles )
+status.row(y).default_format = bold
+
+y += 1
+
+@interval.data.each do |r|
+  o = status.row(y)
+  o.concat([
+    r['number'],
+    r['batch'],
+    r['name'],
+    r['trace'],
+    r['capacity'],
+    r['pallet_type_name'],
+    r['best_before'],
+    r['weight'],
+    r['primo'],
+    r['primo_pallets'],
+    r['incoming'],
+    r['incoming_pallets'],
+    r['outgoing'],
+    r['scrap'],
+    r['scrap_min'],
+    r['ultimo'],
+    r['ultimo_pallets']
+  ])
+
+  # set formats for newly created row
+  column_formats.each_with_index { |f,i| o.set_format(i,f) }
+
+  y += 1
+end
+
+# Some columns needs to be wider
+status.column(2).width = 20
+status.column(6).width = 15
+
+
+#------------#
+#   Totals   #
+#------------#
+
+totals = book.create_worksheet :name => 'Total'
+
+column_titles = [
+  'Type',
+  'Lagerleje (pll)',
+  'Lagerleje (kg)',
+  'Handling (pll)',
+  'Handling (kg)',
+  'Pluk (inkl. min) (krt.)',
+  'Min. pluk (krt.)'
+]
+
+column_formats = [
+  text,
+  number,
+  float,
+  number,
+  float,
+  number,
+  number
+]
+
+y = 0
+
+totals.row(y).concat( column_titles )
+totals.row(y).default_format = bold
+
+y += 1
+
+@interval.sums.each do |r|
+  o = totals.row(y)
+  o.concat([
+    r['typename'],
+    r['primo'] + r['incoming'],
+    r['primo_weight'] + r['incoming_weight'],
+    r['handling'],
+    r['handling_weight'],
+    r['scrap'],
+    r['scrap_min']
+  ])
+
+  # set formats for newly created row
+  column_formats.each_with_index { |f,i| o.set_format(i,f) }
+
+  y += 1
+end
+
+totals.column(1).width = 15
+totals.column(2).width = 15
+totals.column(3).width = 15
+totals.column(4).width = 15
+totals.column(5).width = 20
+totals.column(6).width = 15
+
+#-----------------#
+#   Corrections   #
+#-----------------#
+
+corrections = book.create_worksheet :name => 'Korrektioner'
+
+column_titles = [
+  t("account_table.number"),
+  t("account_table.batch"),
+  t("account_table.name"),
+  t("account_table.trace"),
+  t("account_table.best_before"),
+  t("account_table.pallet_type"),
+  t("account_table.capacity"),
+  t("account_table.weight"),
+  t("account_table.count")
+]
+
+column_formats = [
+  text,
+  text,
+  text,
+  text,
+  date,
+  text,
+  text,
+  text,
+  textr
+]
+
+y = 0
+
+corrections.row(y).concat( column_titles )
+corrections.row(y).default_format = bold
+
+y += 1
+
+@interval.corrections.each do |r|
+
+  o = corrections.row(y)
+  o.concat [
+    r["number"],
+    r["batch"],
+    r["name"],
+    r["trace"],
+    r["best_before"],
+    correction_label(r, "pallet_type_name", " > "),
+    correction_label(r, "capacity", " > "),
+    correction_label(r, "weight", " > ") { |w| number_with_precision w },
+    correction_relative_count(r)
+  ]
+
+  column_formats.each_with_index { |f,i| o.set_format(i,f) }
+
+  y += 1
+end
+
+corrections.column(4).width = 15
+
+
+# return output as string
+report = StringIO.new
+book.write(report)
+
+%><%= raw report.string %>

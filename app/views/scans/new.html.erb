@@ -1,0 +1,20 @@
+<h1>Registrér skanninger</h1>
+
+<% if @customer.barcode_format.present? %>
+<div class="form_container">
+<%= form_tag(url_for( [@department, @customer, :scan] ), :multipart => true) do %>
+  <table class="form">
+    <tr>
+      <td><%= label_tag :datafile %></td>
+      <td><%= file_field_tag :datafile %></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td class="submit"><%= submit_tag "Upload" %> eller <%= link_to 'gå tilbage', [@department, @customer, :arrivals] %></td>
+    </tr>
+  </table>
+<% end %>
+</div>
+<% else %>
+  Der er ikke indstillet et scanningsformat for denne kunde.
+<% end %>

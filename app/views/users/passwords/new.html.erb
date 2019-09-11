@@ -1,0 +1,29 @@
+<h1>Indstil nyt kodeord</h1>
+<p>
+  Du vil få tilsendt en email med informationer om hvordan du indstiller et nyt kodeord.
+</p>
+
+<% if resource.errors.any? %>
+  <div class="form-errors">
+    <% resource.errors.full_messages.each do |msg| %>
+      <%= msg %><br>
+    <% end %>
+  </div>
+<% end %>
+
+<div class="form_container reset_password">
+<%= form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :post }) do |f| %>
+  <table class="form">
+    <tr>
+      <td><%= f.label :email %></td>
+      <td><%= f.text_field :email %></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td class="submit"><%= f.submit "Send reset instruktioner" %></td>
+    </tr>
+  </table>
+<% end %>
+</div>
+
+<%= render :partial => "users/shared/links" %>

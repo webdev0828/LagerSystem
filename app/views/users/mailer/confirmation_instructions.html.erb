@@ -1,0 +1,6 @@
+<p>Hej <%= @resource.full_name %></p>
+<p>
+  Du er blevet oprettet som bruger på jnlager.dk.<br />
+  For at Indstille et kodeord skal du klikke på linket:
+</p>
+<p><%= link_to 'Indstil kodeord', edit_password_url(@resource, :reset_password_token => @token) %></p>

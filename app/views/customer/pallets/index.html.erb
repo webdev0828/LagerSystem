@@ -1,0 +1,28 @@
+<h1>Varer på lager <%= sep %> <%= @customer.name %></h1>
+
+<div class="form_container">
+  <%= form_tag customer_customer_pallets_path(@customer), :method => :get, :class => 'reset-on-load' do %>
+      <table class="form">
+        <tr>
+          <td><label for="number">Varenr.</label></td>
+          <td><%= text_field_tag :number, params[:number] %></td>
+        </tr>
+        <tr>
+          <td><label for="batch">Lot</label></td>
+          <td><%= text_field_tag :batch, params[:batch] %></td>
+        </tr>
+        <tr>
+          <td><label for="trace">Trace</label></td>
+          <td><%= text_field_tag :trace, params[:trace] %></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td class="submit"><%= submit_tag 'Søg', :name => nil %></td>
+        </tr>
+      </table>
+  <% end %>
+</div>
+
+<div id="pallets">
+  <%= render :partial => 'pallets' %>
+</div>

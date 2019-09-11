@@ -1,0 +1,62 @@
+<h1>Lager <%= sep %> <%= @organized_storage.name %></h1>
+<table class="information">
+  <tr>
+    <td><%= OrganizedStorage.attr_name :name %></td>
+    <td><%= @organized_storage.name %></td>
+  </tr>
+  <tr>
+    <td>Lokationer</td>
+    <td><%= number_with_delimiter @full_total %></td>
+  </tr>
+  <tr>
+    <td>Frie lokationer</td>
+    <td>ca. <%= number_with_delimiter @full_free %></td>
+  </tr>
+  <tr>
+    <td>Paller på lager</td>
+    <td><%= number_with_delimiter @data.inject(0) { |m,n| m + n[:normal] + n[:wide] } %></td>
+  </tr>
+</table>
+<div class="controls">
+  <%= link_to 'Rediger', [:edit, @department, @organized_storage] %> <%= sep %>
+  <a href="javascript:void(0)" class="fn-open-print-shelf-dialog">Udskriv reol</a>
+</div>
+
+<h2>Reoler</h2>
+<div id="storages" class="list">
+<% @data.each do |d| %>
+  <a id="shelf_<%= d[:shelf] %>" class="list-item" href="<%= department_graphic_path(@department, :id_a => @department.lobby_id, :id_b => @organized_storage.id, :shelf_b => d[:shelf]) %>">
+    <h3>Reol <%= d[:shelf] %></h3>
+    <table>
+      <tr>
+        <td>1 - <%= d[:max_floor] - 1 %> sal</td>
+        <td>EUR: <strong><%= d[:normal] %></strong> <%= sep %> UK: <strong><%= d[:wide] %></strong> <%= sep %> ca. <strong><%= d[:free] %></strong> frie pladser</td>
+      </tr>
+    </table>
+  </a>
+<% end %>
+</div>
+
+<script id="print-shelf-dialog" type="text/template">
+  <div>
+    <div class="dialog-header">
+      Udskriv reol
+    </div>
+    <form action="<%= print_shelf_department_organized_storage_path(@department, @organized_storage, :format => :pdf) %>" class="fn-print-shelf-form">
+      <table class="form" style="margin:10px;">
+        <tr id="shelf_row">
+          <td>Vælg reol</td>
+          <td><%= select_tag 'shelf', options_for_select((1..@organized_storage.shelf_count).map{|v|[v,v]}), :id => 'shelf_select', :class => 'wide_select' %></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td class="submit">
+            <input type="submit" value="Udskriv" class="submit" />
+            eller
+            <a href="javascript:void(0)" class="fn-overlay-close">annullér</a>
+          </td>
+        </tr>
+      </table>
+    </form>
+  </div>
+</script>

@@ -1,0 +1,36 @@
+<h1><%= @customer_group.name %> <%= sep %> Importér ordre</h1>
+
+<%= render 'order_imports/form' %>
+
+<% if @order_imports.size > 0 %>
+  <div class="arrow-links fn-track-pageviews">
+    &rarr; <%= link_to 'Klik her for mere information om import funktionen', docs_path(page: 'import'), data: { no_turbolink: true } %>
+  </div>
+  <h2>Seneste imports</h2>
+  <div class="list">
+    <% @order_imports.each do |order_import| %>
+      <a class="list-item" href="<%= url_for [@department, @customer_group, order_import] %>">
+        <h3>Ordrenr. <%= order_import.number %></h3>
+        <table>
+          <tr>
+            <td>Læssedato:</td>
+            <td><%= l order_import.load_at %></td>
+          </tr>
+          <tr>
+            <td>Leveringsdato:</td>
+            <td><%= l order_import.deliver_at %></td>
+          </tr>
+          <tr>
+            <td>Modtager:</td>
+            <td><%= order_import.destination_name %></td>
+          </tr>
+        </table>
+      </a>
+    <% end %>
+  </div>
+  <% if @more %>
+    <div class="controls">
+      <%= link_to 'Vis alle', [@department, @customer_group, :order_imports] %>
+    </div>
+  <% end %>
+<% end %>

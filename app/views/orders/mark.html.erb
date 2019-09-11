@@ -1,0 +1,32 @@
+<h1>Afslut flere ordre <%= sep %> <%= @customer.name %></h1>
+
+<div id="finish_orders" class="list selectable-list">
+  <% @orders.each do |order| %>
+      <div class="list-item" data-order-id="<%= order.id %>">
+        <h3>Ordrenr. <%= order.number %></h3>
+        <table>
+          <tr>
+            <td>Læssedato:</td>
+            <td><%= l order.load_at %></td>
+          </tr>
+          <tr>
+            <td>Leveringsdato:</td>
+            <td><%= l order.deliver_at %></td>
+          </tr>
+          <tr>
+            <td>Modtager:</td>
+            <td><%= order.destination_name %></td>
+          </tr>
+        </table>
+      </div>
+  <% end %>
+</div>
+
+<div class="controls">
+  <a href="javascript:void(0)" id="mark_all_ready_orders">Marker alle</a> <%= sep %>
+  <a href="javascript:void(0)" id="unmark_all_ready_orders">Fjern markeringer</a> <%= sep %>
+  <a href="javascript:void(0)" id="finish_marked_orders" data-url="<%= finish_marked_department_customer_orders_path(@department, @customer) %>">
+    Afslut markerede
+  </a>
+</div>
+

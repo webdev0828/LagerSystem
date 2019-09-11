@@ -1,0 +1,39 @@
+<h1>Ordrearkiv</h1>
+<div class="form_container">
+<%= form_tag department_order_history_path(@department), :method => :get, :class => 'reset-on-load' do %>
+  <table class="form">
+    <tr>
+      <td><label for="customer_id">Kunde</label></td>
+      <td><%= select_tag :customer_id, ('<option>~ Alle kunder ~</option>' + options_from_collection_for_select(@department.customers, :id, :name, params[:customer_id].to_i)).html_safe %></td>
+    </tr>
+    <tr>
+      <td><label for="order_number">Ordrenr.</label></td>
+      <td><%= text_field_tag :order_number, params[:order_number] %></td>
+    </tr>
+    <tr>
+      <td><label for="destination_name">Modtager id</label></td>
+      <td><%= text_field_tag :destination_name, params[:destination_name] %></td>
+    </tr>
+    <tr>
+      <td><label for="article_number">Varenr.</label></td>
+      <td><%= text_field_tag :article_number, params[:article_number] %></td>
+    </tr>
+    <tr>
+      <td><label for="batch">Lot</label></td>
+      <td><%= text_field_tag :batch, params[:batch] %></td>
+    </tr>
+    <tr>
+      <td><label for="trace">Trace</label></td>
+      <td><%= text_field_tag :trace, params[:trace] %></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td class="submit"><%= submit_tag 'Søg', :name => nil %></td>
+    </tr>
+  </table>
+<% end %>
+</div>
+
+<div id="orders">
+  <%= render :partial => 'orders' %>
+</div>

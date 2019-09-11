@@ -1,0 +1,3 @@
+$('#show_pallet').html('<%= escape_javascript render :partial => 'pallets/pallet', :locals => { :show_pallet_link => true } %>');
+$.highlight([<%= @pallet.id %>]);
+$('html,body').animate({ scrollTop: $("#show_pallet").offset().top }, 400);

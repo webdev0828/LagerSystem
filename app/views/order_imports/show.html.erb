@@ -1,0 +1,111 @@
+<h1><%= @order_import.number %> <%= sep %> <%= @customer_group.name %></h1>
+<table class="information green">
+  <% if @order_import.owner.present? %>
+    <tr>
+      <td><%= OrderImport.attr_name :owner %></td>
+      <td>
+        <%= @order_import.owner.full_name %>
+      </td>
+    </tr>
+  <% end %>
+  <tr>
+    <td><%= OrderImport.attr_name :number %></td>
+    <td><%= @order_import.number %></td>
+  </tr>
+  <tr>
+    <td><%= OrderImport.attr_name :load_at %></td>
+    <td><%= l @order_import.load_at %></td>
+  </tr>
+  <tr>
+    <td><%= OrderImport.attr_name :deliver_at %></td>
+    <td><%= l @order_import.deliver_at %></td>
+  </tr>
+  <tr>
+    <td><%= OrderImport.attr_name :destination_name %></td>
+    <td><%= @order_import.destination_name %></td>
+  </tr>
+  <tr>
+    <td><%= OrderImport.attr_name :destination_address %></td>
+    <td><%= simple_format(@order_import.destination_address) %></td>
+  </tr>
+  <tr>
+    <td><%= OrderImport.attr_name :delivery %></td>
+    <td><%= @order_import.delivery %></td>
+  </tr>
+  <tr>
+    <td colspan="2" class="file"><%= @order_import.contents %></td>
+  </tr>
+</table>
+
+<% unless @order_import.note.blank? %>
+  <div class="order-note">
+    <%= simple_format(@order_import.note) %>
+  </div>
+<% end %>
+
+<% if can? :modify, @order_import %>
+  <div class="controls">
+    <%= link_to 'Rediger', edit_department_customer_group_order_import_path(@department, @customer_group, @order_import) %>
+    <%= sep %>
+    <%= link_to 'Slet', department_customer_group_order_import_path(@department, @customer_group, @order_import), method: :delete, data: { confirm: 'Er du sikker på at du vil slette importen samt alle vedhæftede ordre?' } %>
+    <%= sep %>
+    <%= link_to 'Marker alle som oprettet', approve_department_customer_group_order_import_path(@department, @customer_group, @order_import) %>
+  </div>
+<% end %>
+
+<h2>Importerede ordrer (<%= @order_import.orders.all.size %>)</h2>
+
+<% @order_import.orders.includes(:reservations, :customer).each do |order| %>
+  <table class="information">
+    <tr>
+      <td><%= Order.attr_name :customer %></td>
+      <td>
+        <%= order.customer.name %>
+        <% if order.customer.number.present? %>
+          (<%= order.customer.number %>)
+        <% end %>
+      </td>
+    </tr>
+    <tr>
+      <td>Status:</td>
+      <td>
+        <%= t 'order_states.' + order.state %>
+        <% if order.editing? and order.owner.present? %>
+          (<%= order.owner.full_name %>)
+        <% end %>
+      </td>
+    </tr>
+    <tr class="clickable" data-url="<%= url_for [@department, order.customer, order] %>">
+      <td></td>
+      <td>Gå til ordre</td>
+    </tr>
+  </table>
+
+  <div class="order-reservations">
+
+    <% order.reservation_groups.each_pair do |info, reservations| %>
+      <div class="reservation">
+        <div class="header">
+          <div class="count">Antal: <strong><%= reservations.sum(&:count) %></strong></div>
+          <div class="title">Nr: <%= info[:number] %><%= sep %>Lot: <%= info[:batch] %></div>
+          <span class="description"><%= info[:name] %></span>
+        </div>
+        <% reservations.each do |reservation| %>
+          <div id="reservation_<%= reservation.id %>" class="pallet" data-count="<%= reservation.count %>">
+            <div class="links">
+              <a class="show" href="<%= url_for [@department, order.customer, reservation.pallet] %>">Vis</a>
+            </div>
+
+            Antal: <%= reservation.count %>
+
+            <% unless reservation.order.finished? %>
+              <%= sep %>
+              <%= reservation.pallet.position.position_name %>
+            <% end %>
+          </div>
+
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+<% end %>

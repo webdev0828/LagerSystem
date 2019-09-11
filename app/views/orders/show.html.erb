@@ -1,0 +1,151 @@
+<h1><%= @order.number %> <%= sep %> <%= 'Oprettet af ' if @order.customer_order? %><%= @customer.name %></h1>
+
+<table class="information<%= ' customer-order' if @order.customer_order? %>">
+  <% if @order.owner.present? %>
+    <tr>
+      <td><%= Order.attr_name :owner %></td>
+      <td>
+        <%= @order.owner.full_name %>
+        <% if @order.may?(:reject, current_user) %>
+          <br>
+          <%= link_to 'Send tilbage til ejer', [:reject, @department, @customer, @order], method: :put %>
+        <% end %>
+      </td>
+    </tr>
+  <% end %>
+  <% if @order.order_import.present? %>
+    <tr class="clickable" data-url="<%= url_for [@department, @order.order_import.customer_group, @order.order_import] %>">
+      <td></td>
+      <td>Gå til import</td>
+    </tr>
+  <% end %>
+  <tr>
+    <td><%= Order.attr_name :number %></td>
+    <td><%= @order.number %></td>
+  </tr>
+  <tr>
+    <td><%= Order.attr_name :load_at %></td>
+    <td><%= l @order.load_at %></td>
+  </tr>
+  <tr>
+    <td><%= Order.attr_name :deliver_at %></td>
+    <td><%= l @order.deliver_at %></td>
+  </tr>
+  <tr>
+    <td><%= Order.attr_name :destination_name %></td>
+    <td><%= @order.destination_name %></td>
+  </tr>
+  <tr>
+    <td><%= Order.attr_name :destination_address %></td>
+    <td><%= simple_format(@order.destination_address) %></td>
+  </tr>
+  <% if @order.delivery.present? %>
+    <tr>
+      <td><%= Order.attr_name :delivery %></td>
+      <td><%= @order.delivery %></td>
+    </tr>
+  <% end %>
+  <tr>
+    <td><%= Order.attr_name :state %></td>
+    <td>
+      <%= t 'order_states.' + @order.state %>
+      <% if @order.editing? and @order.owner.present? %>
+        (<%= @order.owner.full_name %>)
+      <% end %>
+      <% if @order.editing? and @order.owner != current_user %>
+        <br>
+        <%= link_to 'Tag over', [:make_owner, @department, @customer, @order], method: :put, class: 'float-right', data: { confirm: ("Du er igang med at tage kontrollen fra en anden bruger?\n\nVil du fortsætte?" if @order.locked_for? current_user) } %>
+      <% end %>
+    </td>
+  </tr>
+  <% if @order.done_at %>
+    <tr>
+      <td>Registreret udgang</td>
+      <td><%= l @order.done_at %></td>
+    </tr>
+  <% end %>
+</table>
+
+<% unless @order.note.blank? %>
+  <div class="order-note">
+    <%= simple_format(@order.note) %>
+  </div>
+<% end %>
+
+<% if can? :modify, @order %>
+  <div class="controls">
+    <%= link_to 'Rediger', [:edit, @department, @customer, @order] %> <%= sep %>
+    <%= link_to 'Slet', [@department, @customer, @order], :method => :delete, :data => {:confirm => 'Vil du virkelig slette ordren, og alle reservationer?'} %>
+  </div>
+<% end %>
+
+<%= render :partial => 'states' %>
+
+<% unless @order.reservation_groups.empty? %>
+  <h2><%= @order.finished? ? "Varer" : "Reservationer" %></h2>
+<% end %>
+
+<div id="reservations" class="order-reservations">
+  <% @order.reservation_groups.each_pair do |info, reservations| %>
+    <div class="reservation">
+      <div class="header">
+        <div class="count">Antal: <strong><%= reservations.sum(&:count) %></strong></div>
+        <div class="title">Nr: <%= info[:number] %><%= sep %>Lot: <%= info[:batch] %></div>
+        <span class="description"><%= info[:name] %></span>
+      </div>
+      <% reservations.each do |reservation| %>
+        <div id="reservation_<%= reservation.id %>" class="pallet" data-count="<%= reservation.count %>">
+          <div class="links">
+            <% if can? :modify, @order %>
+              <%= link_to 'Slet', cancel_reservation_department_customer_order_path(@department, @customer, @order, :format => 'js', :reservation_id => reservation.id), :class => 'delete', :data => {:confirm => 'Er du sikker?', :remote => true, :method => :put } %>
+            <% end %>
+            <a class="show" href="<%= url_for [@department, @customer, reservation.pallet] %>">Vis</a>
+          </div>
+
+          Antal: <%= reservation.count %>
+
+          <% unless @order.finished? %>
+            <%= sep %>
+
+            <% if reservation.alternatives.empty? %>
+              <%= reservation.pallet.position.position_name %>
+            <% else %>
+              <a class="fn-toggle-alternatives" href="javascript:void(0)" data-toggle="#alternatives_<%= reservation.id %>">
+                <%= reservation.pallet.position.position_name %>
+              </a>
+            <% end %>
+          <% end %>
+        </div>
+        <% unless reservation.alternatives.empty? %>
+          <div id="alternatives_<%= reservation.id %>" style="display:none">
+            <% reservation.alternatives.each do |alternative| %>
+              <%= link_to [:swap, @department, @customer, @order, reservation_id: reservation.id, pallet_id: alternative.id ], method: :put, class: 'pallet-alternative' do %>
+                <span style="visibility:hidden">Antal: <%= reservation.count %> <%= sep %></span>
+                <%= alternative.position.position_name %>
+              <% end %>
+            <% end %>
+          </div>
+        <% end %>
+
+      <% end %>
+    </div>
+  <% end %>
+</div>
+
+<% if can? :modify, @order %>
+  <%= render :partial => 'handle_reservations' %>
+
+<% else %>
+  <h2>Udskrifter</h2>
+  <div class="arrow-links fn-track-pageviews">
+    <% if @order.processing? %>
+      &rarr; <%= link_to 'Plukseddel', scrap_note_department_customer_order_path(@department, @customer, @order, format: :pdf), target: '_blank' %>
+      <br>
+    <% end %>
+    &rarr; <%= link_to 'Palleseddel', pallet_note_department_customer_order_path(@department, @customer, @order, format: :pdf), target: '_blank', class: 'fn-pallet-note' %>
+    <br>
+    &rarr; <%= link_to 'Følgeseddel', delivery_note_department_customer_order_path(@department, @customer, @order, format: :pdf), target: '_blank' %>
+    <br>
+    &rarr; <%= link_to 'Udleveringsseddel', exit_note_department_customer_order_path(@department, @customer, @order, format: :pdf), target: '_blank' %>
+  </div>
+<% end %>

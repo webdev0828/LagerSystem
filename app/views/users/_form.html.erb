@@ -1,0 +1,40 @@
+<% if @user.errors.any? %>
+  <div class="form-errors">
+    <% @user.errors.full_messages.each do |msg| %>
+      <%= msg %><br>
+    <% end %>
+  </div>
+<% end %>
+
+<div class="form_container">
+<%= form_for @user do |f| %>
+  <table class="form">
+    <tr>
+      <td><%= f.label :email %></td>
+      <td><%= f.text_field :email %></td>
+    </tr>
+    <tr>
+      <td><%= f.label :username %></td>
+      <td><%= f.text_field :username %></td>
+    </tr>
+    <tr>
+      <td><%= f.label :full_name %></td>
+      <td><%= f.text_field :full_name %></td>
+    </tr>
+    <tr>
+      <td><%= f.label :phone %></td>
+      <td><%= f.text_field :phone %></td>
+    </tr>
+    <% unless current_user == @user %>
+    <tr>
+      <td><%= f.label :role %></td>
+      <td><%= f.select :role, User::ROLES.map{ |role| [t("activerecord.attributes.user.roles.#{role}"), role] } %></td>
+    </tr>
+    <% end %>
+    <tr>
+      <td></td>
+      <td class="submit"><%= f.submit %> eller <%= link_to 'gå tilbage', @user %></td>
+    </tr>
+  </table>
+<% end %>
+</div>

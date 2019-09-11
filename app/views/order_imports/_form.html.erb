@@ -1,0 +1,22 @@
+<% if @order_import.errors.any? %>
+  <div class="form-errors">
+    <% @order_import.errors.full_messages.each do |msg| %>
+      <%= msg %><br>
+    <% end %>
+  </div>
+<% end %>
+
+<div class="form_container">
+  <%= form_for [@department, @customer_group, @order_import], html: { multipart: true } do |f| %>
+    <table class="form">
+      <tr>
+        <td><%= f.label :file %></td>
+        <td><%= f.file_field :file %></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td class="submit"><%= f.submit 'Importér ordre' %> eller <%= link_to 'gå tilbage', [@department, @customer_group] %></td>
+      </tr>
+    </table>
+  <% end %>
+</div>

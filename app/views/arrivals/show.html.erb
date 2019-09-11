@@ -1,0 +1,74 @@
+<h1>Indgang <%= sep %> <%= @customer.name %></h1>
+
+<table class="information">
+  <tr>
+    <td>Kunde</td>
+    <td><%= @customer.name %></td>
+  </tr>
+  <tr>
+    <td>Indgangsdato</td>
+    <td><%= l @arrival.arrived_at.to_date %></td>
+  </tr>
+  <tr>
+    <td>Paller</td>
+    <td><%= @arrival.pallet_count %></td>
+  </tr>
+  <tr>
+    <td>Oprindeligt antal</td>
+    <td><%= @arrival.count %></td>
+  </tr>
+  <% if @arrival.temperature %>
+  <tr>
+    <td><%= Arrival.attr_name :temperature %></td>
+    <td><%= number_with_precision @arrival.temperature %>&deg;</td>
+  </tr>
+  <% end %>
+  <tr class="clickable" data-url="<%= department_graphic_path(@department, :id_a => @department.lobby_id, :anchor => @arrival.pallets.map(&:id).join(",")) %>">
+    <td></td>
+    <td>Vis i <%= @department.lobby.name %></td>
+  </tr>
+</table>
+<table class="listing">
+  <tr>
+    <th><%= Pallet.attr_name :number %></th>
+    <th><%= Pallet.attr_name :name %></th>
+    <th><%= Pallet.attr_name :batch %></th>
+    <th><%= Pallet.attr_name :trace %></th>
+    <th><%= Pallet.attr_name :weight %></th>
+    <th><%= Pallet.attr_name :original_count %></th>
+    <th><%= Pallet.attr_name :taken %></th>
+    <th><%= Pallet.attr_name :reserved %></th>
+    <th><%= Pallet.attr_name :capacity %></th>
+    <th><%= Pallet.attr_name :arrived_at %></th>
+    <th><%= Pallet.attr_name :best_before %></th>
+    <th><%= Pallet.attr_name :pallet_type %></th>
+  </tr>
+
+  <% @arrival.pallets.each do |pallet| %>
+    <tr class="<%= cycle("odd","even") %> clickable" data-url="<%= url_for [@department, @customer, pallet] %>">
+      <td><%= pallet.number %></td>
+      <td><%= pallet.name %></td>
+      <td><%= pallet.batch %></td>
+      <td><%= pallet.trace %></td>
+      <td class="right"><%= number_with_precision pallet.weight %></td>
+      <td class="center"><%= pallet.count %></td>
+      <td class="center"><%= "#{pallet.taken if pallet.taken > 0}" %></td>
+      <td class="center"><%= "#{pallet.reserved if pallet.reserved > 0}" %></td>
+      <td class="center"><%= pallet.capacity %></td>
+      <td class="right"><%= l pallet.arrived_at.to_date, :format => :short %></td>
+      <td class="right"><%= l pallet.best_before, :format => :short %></td>
+      <td class="center"><%= pallet.pallet_type.name %></td>
+    </tr>
+  <% end %>
+
+</table>
+
+<div class="controls">
+  <%= link_to 'Rediger', [:edit, @department, @customer, @arrival] %> <%= sep %>
+  <%= link_to 'Slet indgang', [@department, @customer, @arrival], :method => :delete, :data => { :confirm => 'Er du sikker på at du vil slette alle paller i denne indgang?' } %>
+</div>
+
+<h2>Udskrifter</h2>
+<div class="arrow-links fn-track-pageviews">
+  &rarr; <%= link_to 'Indgangsliste', department_customer_arrival_path(@department, @customer, @arrival, format: :pdf), target: '_blank' %>
+</div>

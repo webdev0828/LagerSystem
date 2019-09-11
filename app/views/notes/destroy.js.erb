@@ -1,0 +1,14 @@
+<% if @note.destroyed? %>
+
+	var note = $("#note-<%= @note.id %>");
+    var form = note.next();
+
+    note.slideUp('fast', function(){ note.remove(); });
+    form.remove();
+
+	$.notify('Noten er nu slettet.');
+
+<% else %>
+	$.notify('Noten kunne ikke slettes.', { type: 'alert' });
+
+<% end %>

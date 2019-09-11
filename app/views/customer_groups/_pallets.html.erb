@@ -1,0 +1,44 @@
+<%= will_paginate @pallets %>
+
+<table class="listing">
+  <tr>
+    <th><%= Pallet.attr_name :number %></th>
+    <th><%= Pallet.attr_name :name %></th>
+    <th><%= Pallet.attr_name :batch %></th>
+    <th><%= Pallet.attr_name :trace %></th>
+    <th><%= Pallet.attr_name :weight %></th>
+    <th><%= Pallet.attr_name :count %></th>
+    <th><%= Pallet.attr_name :reserved %></th>
+    <th><%= Pallet.attr_name :capacity %></th>
+    <th><%= Pallet.attr_name :arrived_at %></th>
+    <th><%= Pallet.attr_name :best_before %></th>
+    <th><%= Pallet.attr_name :pallet_type %></th>
+    <th><%= Pallet.attr_name :position %></th>
+    <th><%= Pallet.attr_name :customer %></th>
+  </tr>
+
+  <% @pallets.each do |pallet| %>
+  <tr class="<%= cycle("odd","even") %> clickable" data-url="<%= url_for [@department, pallet.customer, pallet] %>">
+
+    <td><%= pallet.number %></td>
+    <td><%= pallet.name %></td>
+    <td><%= pallet.batch %></td>
+    <td><%= pallet.trace %></td>
+    <td class="right"><%= number_with_precision pallet.weight %></td>
+    <td class="center"><%= pallet.available %></td>
+    <td class="center"><%= "#{pallet.reserved if pallet.reserved > 0}" %></td>
+    <td class="center"><%= pallet.capacity %></td>
+    <td class="right"><%= l pallet.arrived_at.to_date, :format => :short %></td>
+    <td class="right"><%= l pallet.best_before, :format => :short %></td>
+    <td class="center"><%= pallet.pallet_type.name %></td>
+    <td class="left"><%= pallet.position.position_name %></td>
+    <td>
+      <%= pallet.customer.name %>
+      (<%= pallet.customer.number %>)
+    </td>
+  </tr>
+  <% end %>
+
+</table>
+
+<%= will_paginate @pallets %>

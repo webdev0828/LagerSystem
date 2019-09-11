@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Jnlager</title>
+  <link rel="icon" type="image/png" href="/assets/favicon.png" />
+  <%= stylesheet_link_tag "application", :media => "all" %>
+  <%= render :partial => 'layouts/analytics' if Rails.application.config.analytics %>
+  <%= javascript_include_tag "application" %>
+  <%= csrf_meta_tag %>
+</head>
+<body class="<%= Rails.env %>">
+
+<%= render :partial => 'layouts/customer_menu' %>
+
+<div id="topright">
+
+  <div id="loginmenu">
+    <% if user_signed_in? %>
+        <%= menu_item current_user.full_name, edit_me_path %> <%= sep("~") %>
+        <%= link_to 'Log ud', destroy_user_session_path, :method => :delete %>
+    <% else %>
+        <%= menu_item 'Log ind', new_user_session_path %>
+    <% end %>
+  </div>
+
+  <div id="notifications">
+    <% if notice %>
+        <div class="notification flash notice"><%= notice %></div>
+    <% end %>
+    <% if alert %>
+        <div class="notification flash alert"><%= alert %></div>
+    <% end %>
+  </div>
+
+</div>
+
+
+<div id="content">
+  <%= yield %>
+</div>
+
+
+</body>
+</html>

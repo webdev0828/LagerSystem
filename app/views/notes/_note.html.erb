@@ -1,0 +1,9 @@
+<div id="note-<%= note.id %>" class="note">
+  <div class="links">
+    <%= link_to 'Slet', [@department, @customer, note], method: :delete, remote: true, data: { confirm: 'Er du sikker?' }, class: 'delete' %>
+    <a href="javascript:void(0)" class="fn-note-edit maybe-confirm edit">Rediger</a>
+  </div>
+  <div class="content"><%= note.content %></div>
+</div>
+
+<%= render partial: 'notes/note_form', locals: { note: note } %>

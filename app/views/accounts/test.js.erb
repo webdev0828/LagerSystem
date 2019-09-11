@@ -1,0 +1,5 @@
+<% if @interval.valid? %>
+  $("#current_result").html("<%= escape_javascript(render(:partial => 'current', :locals => { :table_class => 'active' })) %>");
+<% else %>
+  $.notify('Til <%= escape_javascript @interval.errors[:to].first %>', { type: 'alert' });
+<% end %>

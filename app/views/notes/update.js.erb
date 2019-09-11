@@ -1,0 +1,11 @@
+var note = $("#note-<%= @note.id %>");
+var form = note.next('.note-form');
+var content = note.find('.content');
+var textarea = form.find('textarea');
+var value = "<%= escape_javascript @note.content.strip %>";
+
+content.html(value);
+textarea.html(value).val(value)
+
+note.show();
+form.hide();

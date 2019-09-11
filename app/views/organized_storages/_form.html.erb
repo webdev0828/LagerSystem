@@ -1,0 +1,22 @@
+<% if @organized_storage.errors.any? %>
+  <div class="form-errors">
+    <% @organized_storage.errors.full_messages.each do |msg| %>
+      <%= msg %><br>
+    <% end %>
+  </div>
+<% end %>
+
+<div class="form_container">
+<%= form_for [@department, @organized_storage] do |f| %>
+  <table class="form">
+    <tr>
+      <td><%= f.label :name %></td>
+      <td><%= f.text_field :name, :class => 'focus-on-load' %></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td class="submit"><%= f.submit %> eller <%= link_to "gå tilbage", [@department, @organized_storage] %></td>
+    </tr>
+  </table>
+<% end %>
+</div>

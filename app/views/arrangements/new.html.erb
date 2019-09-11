@@ -1,0 +1,22 @@
+<h1>Kundeaftale <%= sep %> <%= @customer.name %></h1>
+
+<%= form_errors(@arrangement) %>
+
+<div class="form_container">
+  <%= form_for [@department, @customer, @arrangement] do |f| %>
+    <table class="form">
+      <tr>
+        <td><%= f.label :use_scrap_minimum %></td>
+        <td><%= f.check_box :use_scrap_minimum %></td>
+      </tr>
+      <tr id="arrangement_scrap_minimum_row" style="<%= @arrangement.use_scrap_minimum ? "" : "display:none;" %>">
+        <td><%= f.label :scrap_minimum %></td>
+        <td><%= f.text_field :scrap_minimum %></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td class="submit"><%= f.submit 'Gem aftale' %> eller <%= link_to 'gå tilbage', [@department, @customer] %></td>
+      </tr>
+    </table>
+  <% end %>
+</div>

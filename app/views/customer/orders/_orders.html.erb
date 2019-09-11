@@ -1,0 +1,24 @@
+<%= will_paginate @orders, :params => {:anchor => 'orders'} %>
+
+<table class="listing">
+  <tr>
+    <th>Ordrenr.</th>
+    <th>Modtager id</th>
+    <th>Læssedato</th>
+    <th>Registreret udgang</th>
+    <th>Antal</th>
+  </tr>
+
+  <% @orders.each do |order| %>
+  <tr class="<%= cycle('odd','even') %> clickable" data-url="<%= url_for [:customer, @customer, order] %>">
+    <td><%= order.number %></td>
+    <td><%= order.destination_name %></td>
+    <td class="right"><%= l order.load_at %></td>
+    <td class="right"><%= l order.done_at %></td>
+    <td class="right"><%= order.reservations.map(&:count).sum %></td>
+  </tr>
+  <% end %>
+
+</table>
+
+<%= will_paginate @orders, :params => {:anchor => 'orders'} %>

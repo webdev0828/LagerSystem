@@ -1,0 +1,56 @@
+.border-radius (@radius: 5px) {
+  -moz-border-radius: @radius;
+  -webkit-border-radius: @radius;
+  border-radius: @radius;
+}
+.border-left-radius (@radius: 5px) {
+  border-top-left-radius: @radius;
+  border-bottom-left-radius: @radius;
+  -moz-border-radius-topleft: @radius;
+  -moz-border-radius-bottomleft: @radius;
+}
+
+.border-top-radius (@radius: 5px) {
+  -moz-border-radius-topleft: @radius;
+  -moz-border-radius-topright: @radius;
+  border-top-left-radius: @radius;
+  border-top-right-radius: @radius;
+}
+
+.border-topright-radius (@radius: 5px) {
+  -moz-border-radius-topright: @radius;
+  border-top-right-radius: @radius;
+}
+
+.button (@color: #ccc, @hover: #abc){
+  background-color:#ccc;
+  border:none;
+  padding:5px 10px;
+  .border-radius;
+  color:black;
+  text-decoration:none;
+
+  &:hover {
+    background-color:#abc;
+  }
+}
+
+.arrow-links {
+  a {
+    text-decoration:none;
+    color:#000;
+    line-height:1.5;
+    &:hover {
+      font-weight:bold;
+      color:#345;
+    }
+  }
+}
+
+.clearfix {
+  &:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+}

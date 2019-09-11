@@ -1,0 +1,42 @@
+<h1>Optælling - <%= @interval.week_label %></h1>
+<table class="information">
+  <tr>
+    <td>Kunde</td>
+    <td><%= @customer.name %></td>
+  </tr>
+  <tr>
+    <td>Fra</td>
+    <td><%= l @interval.from, :format => :long %></td>
+  </tr>
+  <tr>
+    <td>Til</td>
+    <td><%= l @interval.to, :format => :long %></td>
+  </tr>
+</table>
+
+<div id="notes" data-confirm-edit="<%= t 'view.notes.edit_warning' %>">
+  <%= render @notes %>
+  <%= render :partial => 'notes/note_form', :locals => { :note => @customer.notes.build } %>
+</div>
+
+<div class="controls">
+  <a href="javascript:void(0)" data-confirm="<%= t 'view.notes.new_warning' %>" class="fn-note-new">Ny note</a>
+</div>
+
+<%= render :partial => 'current', :locals => { :table_class => '' } %>
+
+<div class="controls">
+  <%= link_to 'Vis løbende optælling', [:current, @department, @customer, :intervals] %> <%= sep %>
+  <%= link_to 'Vis tidligere', [@department, @customer, :intervals] %> <%= sep %>
+  <%= link_to 'Slet optælling', [@department, @customer, @interval], :data => { :confirm => "Er du sikker?" }, :method => :delete  %>
+</div>
+
+<h2>Udskrifter</h2>
+<div class="arrow-links fn-track-pageviews">
+  &rarr; <%= link_to 'Lagerliste', list_department_customer_interval_path(@department, @customer, @interval, :format => :pdf), :target => :_blank %><br>
+  &rarr; <%= link_to 'Lagerliste (vægt)', list_weight_department_customer_interval_path(@department, @customer, @interval, :format => :pdf), :target => :_blank %><br>
+  &rarr; <%= link_to 'CSV liste', list_department_customer_interval_path(@department, @customer, @interval, :format => :csv), :target => :_blank %><br>
+  &rarr; <%= link_to 'CSV liste (vægt)', list_weight_department_customer_interval_path(@department, @customer, @interval, :format => :csv), :target => :_blank %><br>
+  &rarr; <%= link_to 'Excel liste', list_department_customer_interval_path(@department, @customer, @interval, :format => :xls), :target => :_blank %><br>
+  &rarr; <%= link_to 'Til regnskab', summary_department_customer_interval_path(@department, @customer, @interval, :format => :pdf), :target => :_blank %><br>
+</div>

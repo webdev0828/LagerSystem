@@ -1,0 +1,9 @@
+$("#search_result").html("<%= escape_javascript(render :partial => 'pallet_selection', :collection => @pallets, :as => :pallet) %>");
+$("#selection_info").<%= @pallets.size > 0 ? 'show' : 'hide' %>();
+<% if @pallets.size == 0 %>
+$.notify('Ingen paller fundet');
+<% else %>
+$.notify('<%= "Over " if @more %><%= pluralize(@pallets.size, 'palle', 'paller') %> fundet.');
+<% end %>
+$("#search_result_count").html('<%= "Der blev fundet mere end #{pluralize(@pallets.size, 'palle', 'paller')}" if @more %>');
+$("#selection_info .label strong").html('0');

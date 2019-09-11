@@ -1,0 +1,10 @@
+var root = $('#notes');
+root.find('.note').show();
+root.find('.note-form').hide();
+
+var noteFormNew = root.find('.note-form-new');
+var note = $("<%= escape_javascript render @note %>");
+
+note.insertBefore(noteFormNew);
+
+$.notify("Noten er nu oprettet.");

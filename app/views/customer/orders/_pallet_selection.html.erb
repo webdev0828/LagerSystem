@@ -1,0 +1,22 @@
+<div class="list-item<%= " pluk-palle" if pallet.scrap? %>" data-pallet-id="<%= pallet.id %>" data-count="<%= pallet.available %>">
+  <div class="links">
+    <a href="javascript:void(0)" class="pluk">Pluk</a>
+  </div>
+  <h3>Nr: <%= pallet.number %><%= sep %>Lot: <%= pallet.batch %><%= sep %><%= pallet.name %><%= sep + "[Pluk]" if pallet.count != pallet.capacity %></h3>
+  <table>
+    <% if pallet.trace.present? %>
+    <tr>
+      <td><%= Pallet.attr_name :trace %></td>
+      <td><%= pallet.trace %></td>
+    </tr>
+    <% end %>
+    <tr>
+      <td><%= Pallet.attr_name :count %></td>
+      <td><%= pallet.available %> <%= "(#{pallet.reserved} reserveret)" if pallet.reserved > 0 %> af <%= pallet.capacity %> </td>
+    </tr>
+    <tr>
+      <td><%= Pallet.attr_name :best_before %></td>
+      <td><%= date_with_words pallet.best_before, true %></td>
+    </tr>
+  </table>
+</div>

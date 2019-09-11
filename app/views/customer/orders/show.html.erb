@@ -1,0 +1,103 @@
+<h1><%= @order.number %> <%= sep %> <%= @customer.name %> (<%= @customer.department.label %>)</h1>
+<table class="information">
+  <% if @order.owner.present? %>
+    <tr>
+      <td><%= Order.attr_name :owner %></td>
+      <td><%= @order.owner.full_name %></td>
+    </tr>
+  <% end %>
+  <tr>
+    <td><%= Order.attr_name :number %></td>
+    <td><%= @order.number %></td>
+  </tr>
+  <tr>
+    <td><%= Order.attr_name :load_at %></td>
+    <td><%= l @order.load_at %></td>
+  </tr>
+  <tr>
+    <td><%= Order.attr_name :deliver_at %></td>
+    <td><%= l @order.deliver_at %></td>
+  </tr>
+  <tr>
+    <td><%= Order.attr_name :destination_name %></td>
+    <td><%= @order.destination_name %></td>
+  </tr>
+  <tr>
+    <td><%= Order.attr_name :destination_address %></td>
+    <td><%= simple_format(@order.destination_address) %></td>
+  </tr>
+  <tr>
+    <td><%= Order.attr_name :state %></td>
+    <td>
+      <%= t 'order_states_customer.' + @order.state %>
+      <% if @order.editing? and @order.owner.present? %>
+        (<%= @order.owner.full_name %>)
+        <% if @order.owner.is?(:customer) and @order.owner != current_user %>
+          <br>
+          <%= link_to 'Tag over', [:make_owner, :customer, @customer, @order], method: :put, class: 'float-right', data: { confirm: "Du er igang med at tage kontrollen fra en anden bruger?\n\nVil du fortsætte?" } %>
+        <% end %>
+      <% end %>
+    </td>
+  </tr>
+  <% if @order.done_at %>
+      <tr>
+        <td>Registreret udgang</td>
+        <td><%= l @order.done_at %></td>
+      </tr>
+  <% end %>
+</table>
+
+<% unless @order.note.blank? %>
+    <div class="order-note">
+      <%= simple_format(@order.note) %>
+    </div>
+<% end %>
+
+<% if can? :modify, @order %>
+    <div class="controls">
+      <%= link_to 'Rediger', [:edit, :customer, @customer, @order] %> <%= sep %>
+      <%= link_to 'Slet', [:customer, @customer, @order], :method => :delete, :data => { :confirm => 'Vil du slette ordren, og alle reservationer?' } %>
+    </div>
+<% end %>
+
+<% if @order.may?(:submit, current_user) %>
+  <div class="order-state-buttons">
+    <%= link_to 'Indsend', [:submit, :customer, @customer, @order], method: :put %>
+  </div>
+<% end %>
+
+<% unless @reservations.empty? %>
+    <h2><%= @order.finished? ? "Varer" : "Reservationer" %></h2>
+<% end %>
+
+<div id="reservations" class="order-reservations">
+  <% @reservations.each_pair do |info, reservations| %>
+      <div class="reservation">
+        <div class="header">
+          <div class="count">Antal: <strong><%= reservations.sum(&:count) %></strong></div>
+          <div class="title">Nr: <%= info[:number] %><%= sep %>Lot: <%= info[:batch] %></div>
+          <span class="description"><%= info[:name] %></span>
+        </div>
+        <% reservations.each do |reservation| %>
+            <div id="pallet_<%= reservation.id %>" class="pallet" data-count="<%= reservation.count %>">
+              <div class="links">
+                <%= link_to 'Slet', cancel_reservation_customer_customer_order_path(@customer, @order, :format => 'js', :reservation_id => reservation.id), :class => 'delete', :data => { :confirm => 'Er du sikker?', :remote => true, :method => :put } if can? :modify, @order %>
+                <a class="show" href="<%= url_for [:customer, @customer, reservation.pallet] %>">Vis</a>
+              </div>
+              Antal: <%= reservation.count %>
+            </div>
+        <% end %>
+      </div>
+  <% end %>
+</div>
+
+<% if can? :modify, @order %>
+    <%= render :partial => 'handle_reservations' %>
+
+<% else %>
+    <h2>Udskrifter</h2>
+    <div class="arrow-links fn-track-pageviews">
+      &rarr; <%= link_to 'Følgeseddel', delivery_note_customer_customer_order_path(@customer, @order, format: :pdf), target: '_blank' %><br>
+      &rarr; <%= link_to 'Udleveringsseddel', exit_note_customer_customer_order_path(@customer, @order, format: :pdf), target: '_blank' %>
+    </div>
+<% end %>

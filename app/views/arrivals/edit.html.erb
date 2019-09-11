@@ -1,0 +1,66 @@
+<h1>Rediger indgang</h1>
+
+<% if @arrival.errors.any? %>
+  <div class="form-errors">
+    <% @arrival.errors.full_messages.each do |msg| %>
+      <%= msg %><br>
+    <% end %>
+  </div>
+<% end %>
+
+<div class="form_container">
+<%= form_for([@department, @customer, @arrival]) do |f| %>
+  <table class="form">
+    <tr>
+      <td><%= f.label :number %></td>
+      <td><%= f.text_field :number, :class => 'focus-on-load' %></td>
+    </tr>
+    <tr>
+      <td><%= f.label :batch %></td>
+      <td><%= f.text_field :batch %></td>
+    </tr>
+    <tr>
+      <td><%= f.label :name %></td>
+      <td><%= f.text_field :name %></td>
+    </tr>
+    <tr>
+      <td><%= f.label :trace %></td>
+      <td><%= f.text_field :trace %></td>
+    </tr>
+    <% if @arrival.pallets.count == 0 %>
+    <tr>
+      <td><%= f.label :capacity %></td>
+      <td><%= f.text_field :capacity %></td>
+    </tr>
+    <tr>
+      <td><%= f.label :count, "Antal i alt" %></td>
+      <td><%= f.text_field :count %></td>
+    </tr>
+    <tr>
+      <td><%= f.label :weight, "Vægt pr. krt." %></td>
+      <td><%= f.localized_number_field :weight %></td>
+    </tr>
+    <% end %>
+
+    <% if not @arrival.errors[:arrived_at].blank? or @customer.last_count.nil? or @arrival.arrived_at >= @customer.last_count %>
+    <tr>
+      <td><%= f.label :arrived_at %></td>
+      <td><%= f.date_select :arrived_at %></td>
+    </tr>
+    <% end %>
+
+    <tr>
+      <td><%= f.label :best_before %></td>
+      <td><%= f.date_select :best_before, :start_year => Time.now.year-1 %></td>
+    </tr>
+    <tr>
+      <td><%= f.label :temperature %></td>
+      <td><%= f.localized_number_field :temperature %></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td class="submit"><%= f.submit %> eller <%= link_to 'gå tilbage', [@department, @customer, @arrival] %></td>
+    </tr>
+  </table>
+<% end %>
+</div>

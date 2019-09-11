@@ -1,0 +1,48 @@
+<h1>Rediger ordre import</h1>
+
+<% if @order_import.errors.any? %>
+  <div class="form-errors">
+    <% @order.errors.full_messages.each do |msg| %>
+      <%= msg %><br>
+    <% end %>
+  </div>
+<% end %>
+
+<div class="form_container">
+  <%= form_for [@department, @customer_group, @order_import] do |f| %>
+    <table class="form">
+      <tr>
+        <td><%= f.label :number %></td>
+        <td><%= f.text_field :number %></td>
+      </tr>
+      <tr>
+        <td><%= f.label :load_at %></td>
+        <td><%= f.date_select :load_at %></td>
+      </tr>
+      <tr>
+        <td><%= f.label :deliver_at %></td>
+        <td><%= f.date_select :deliver_at %></td>
+      </tr>
+      <tr>
+        <td><%= f.label :destination_name %></td>
+        <td><%= f.text_field :destination_name, :class => 'autofill' %></td>
+      </tr>
+      <tr>
+        <td><%= f.label :destination_address %></td>
+        <td><%= f.text_area :destination_address, :rows => 4 %></td>
+      </tr>
+      <tr>
+        <td><%= f.label :delivery %></td>
+        <td><%= f.text_field :delivery %></td>
+      </tr>
+      <tr>
+        <td><%= f.label :note %></td>
+        <td><%= f.text_area :note, :rows => 4 %></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td class="submit"><%= f.submit 'Opdatér ordrer' %> eller <%= link_to 'annullér', [@department, @customer_group, @order_import] %></td>
+      </tr>
+    </table>
+  <% end %>
+</div>

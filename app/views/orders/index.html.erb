@@ -1,0 +1,31 @@
+<h1>Ordre <%= sep %> <%= @customer.name %></h1>
+<% Order.aasm.states.map(&:name).each do |state|
+  next unless @order_groups.key?(state) %>
+
+  <h2><%= @labels[state] || t("order_states.#{state}") %></h2>
+  <div id="orders_<%= state %>" class="list">
+    <% @order_groups[state].each do |order| %>
+      <a class="list-item" href="<%= url_for [@department, @customer, order] %>">
+        <h3>Ordrenr. <%= order.number %></h3>
+        <table>
+          <tr>
+            <td>Læssedato:</td>
+            <td><%= l order.load_at %></td>
+          </tr>
+          <tr>
+            <td>Leveringsdato:</td>
+            <td><%= l order.deliver_at %></td>
+          </tr>
+          <tr>
+            <td>Modtager:</td>
+            <td><%= order.destination_name %></td>
+          </tr>
+        </table>
+      </a>
+    <% end %>
+  </div>
+<% end %>
+
+<div class="controls">
+  <%= link_to 'Ny ordre', [:new, @department, @customer, :order] %>
+</div>

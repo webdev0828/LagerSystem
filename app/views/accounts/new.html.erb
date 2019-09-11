@@ -1,0 +1,42 @@
+<h1>Ny optælling</h1>
+
+<%= form_errors(@interval) %>
+
+<div class="form_container">
+<%= form_for([@department, @customer, @interval]) do |f| %>
+  <table class="form">
+    <% if @customer.last_count %>
+    <tr>
+      <td><%= f.label :from %></td>
+      <td><h2><%= l @interval.from, :format => :long %></h2></td>
+    </tr>
+    <% else %>
+    <tr>
+      <td><%= f.label :from %></td>
+      <td><%= f.datetime_select :from, :datetime_separator => '<br>', :include_seconds => true %></td>
+    </tr>
+    <% end %>
+    <tr>
+      <td><%= f.label :to %></td>
+      <td><%= f.datetime_select :to, :datetime_separator => '<br>', :include_seconds => true %></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td class="submit">
+        <%= f.button 'Vis eksempel', :type => 'button', :class => 'fn-remote-submit', :data => { :url => url_for([:test, @department, @customer, :intervals]) } %>
+        <%= f.submit %>
+      </td>
+    </tr>
+  </table>
+<% end %>
+</div>
+
+<div id="current_result"></div>
+
+<style type="text/css" media="screen">
+
+  #interval_to_1i{width:70px;}
+  #interval_to_2i{width:100px;}
+  #interval_to_3i,#interval_to_4i,#interval_to_5i,#interval_to_6i{width:50px;}
+
+</style>

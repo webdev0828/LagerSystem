@@ -1,0 +1,17 @@
+<h1>Lager <%= sep %> <%= @bulk_storage.name %></h1>
+
+<table class="information">
+  <tr>
+    <td><%= BulkStorage.attr_name :name %></td>
+    <td><%= @bulk_storage.name %></td>
+  </tr>
+  <tr>
+    <td>Paller</td>
+    <td><%= @bulk_storage.pallets.count %></td>
+  </tr>
+</table>
+
+<div class="controls">
+  <%= link_to 'Rediger', [:edit, @department, @bulk_storage] %> <%= sep %>
+  <%= link_to 'Slet', [@department, @bulk_storage], :method => :delete, :data => { :confirm => 'Vil du slette dette lager?' } %>
+</div>

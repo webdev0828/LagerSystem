@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Jnlager</title>
+  <link rel="icon" type="image/png" href="/assets/favicon.png" />
+  <%= stylesheet_link_tag "application", :media => "all" %>
+  <%= render :partial => 'layouts/analytics' if Rails.application.config.analytics %>
+  <%= javascript_include_tag "application" %>
+  <%= csrf_meta_tag %>
+</head>
+<body class="<%= Rails.env %>">
+
+<div id="topright">
+  <div id="notifications">
+    <% if notice %>
+      <div class="notification flash notice"><%= notice %></div>
+    <% end %>
+    <% if alert %>
+      <div class="notification flash alert"><%= alert %></div>
+    <% end %>
+  </div>
+</div>
+
+<div id="simple">
+  <%= yield %>
+</div>
+
+</body>
+</html>

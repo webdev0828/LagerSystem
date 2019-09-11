@@ -1,0 +1,56 @@
+<% if @customer.errors.any? %>
+  <div class="form-errors">
+    <% @customer.errors.full_messages.each do |msg| %>
+      <%= msg %><br>
+    <% end %>
+  </div>
+<% end %>
+
+<div class="form_container">
+<%= form_for [@department, @customer] do |f| %>
+  <table class="form">
+    <tr>
+      <td><%= f.label :name %></td>
+      <td><%= f.text_field :name, :class => 'focus-on-load' %></td>
+    </tr>
+    <tr>
+      <td><%= f.label :subname %></td>
+      <td><%= f.text_field :subname %></td>
+    </tr>
+    <tr>
+      <td><%= f.label :number %></td>
+      <td><%= f.text_field :number %></td>
+    </tr>
+    <tr>
+      <td><%= f.label :address %></td>
+      <td><%= f.text_area :address, :rows => 3 %></td>
+    </tr>
+    <tr>
+      <td><%= f.label :phone %></td>
+      <td><%= f.text_field :phone %></td>
+    </tr>
+    <tr>
+      <td><%= f.label :fax %></td>
+      <td><%= f.text_field :fax %></td>
+    </tr>
+    <tr>
+      <td><%= f.label :email %></td>
+      <td><%= f.text_field :email %></td>
+    </tr>
+	<% unless @customer.new_record? %>
+    <tr>
+      <td><%= f.label :deactivated %></td>
+      <td><%= f.check_box :deactivated %></td>
+    </tr>
+	<% end %>
+    <tr class="admin_settings" style="display:none">
+      <td><%= f.label :barcode_format %></td>
+      <td><%= f.text_area :barcode_format, :rows => 10 %></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td class="submit"><%= f.submit %> eller <%= link_to 'gå tilbage', [@department, @customer] %></td>
+    </tr>
+  </table>
+<% end %>
+</div>

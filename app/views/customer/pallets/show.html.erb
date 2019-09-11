@@ -1,0 +1,53 @@
+<h1>Palle<%= " (tom)" unless @pallet.deleted_at.nil? %></h1>
+
+<%= render :partial => 'pallet' %>
+
+<% unless @pallet.corrected_count.nil? %>
+    <h2>Korrektioner</h2>
+    <table class="listing">
+      <tr>
+        <th>Korrektionstidspunkt</th>
+        <th>Antal</th>
+        <th>Antal pr. palle</th>
+        <th>Vægt (kg)</th>
+        <th>Type</th>
+      </tr>
+      <tr class="<%= cycle('odd','even', :name => 'corrections') %>">
+        <td class="center">~ Ved indgang ~</td>
+        <td><%= @pallet.original_count %></td>
+        <td><%= @pallet.original_capacity %></td>
+        <td><%= number_with_precision @pallet.original_weight %></td>
+        <td><%= @pallet.original_pallet_type.name %></td>
+      </tr>
+      <% @pallet.pallet_corrections.each do |correction| %>
+          <tr class="<%= cycle('odd','even', :name => 'corrections') %>">
+            <td><%= l correction.created_at %></td>
+            <td><%= correction.count %></td>
+            <td><%= correction.capacity %></td>
+            <td><%= number_with_precision correction.weight %></td>
+            <td><%= correction.pallet_type.name %></td>
+          </tr>
+      <% end %>
+    </table>
+<% end %>
+
+<% if @pallet.taken > 0 %>
+
+    <h2>Pluk</h2>
+    <table class="listing">
+      <tr>
+        <th>Ordrenr.</th>
+        <th>Modtager id</th>
+        <th>Antal</th>
+        <th>Plukdato</th>
+      </tr>
+      <% @pallet.reservations.select(&:done_at).each do |reservation| %>
+          <tr class="<%= cycle('odd','even', :name => 'taken') %> clickable" data-url="<%= url_for [:customer, @customer, reservation.order]%>">
+            <td><%= reservation.order.number %></td>
+            <td><%= reservation.order.destination_name %></td>
+            <td><%= reservation.count %></td>
+            <td><%= l reservation.done_at %></td>
+          </tr>
+      <% end %>
+    </table>
+<% end %>

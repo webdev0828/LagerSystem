@@ -1,0 +1,52 @@
+<h1>Kunde <%= sep %> <%= @customer.name %></h1>
+<table class="information">
+  <% @customer.each_human_name_and_value :name, :subname, :number do |n, v| %>
+    <tr>
+      <td><%= n %></td>
+      <td><%= v %></td>
+    </tr>
+  <% end %>
+  <% if @customer.address.present? %>
+  <tr>
+    <td><%= Customer.attr_name :address %></td>
+    <td><%= simple_format(@customer.address) %></td>
+  </tr>
+  <% end %>
+  <% @customer.each_human_name_and_value :phone, :fax, :email do |n, v| %>
+    <tr>
+      <td><%= n %></td>
+      <td><%= v %></td>
+    </tr>
+  <% end %>
+  <% if @customer.deactivated %>
+    <tr>
+      <td><%= Customer.attr_name :deactivated %></td>
+      <td>Ja</td>
+    </tr>
+  <% end %>
+</table>
+
+<div class="controls">
+  <%= link_to 'Rediger', [:edit, @department, @customer] %>
+</div>
+
+
+<% if @customer.current_arrangement %>
+<h2>Kundeaftale</h2>
+<table class="information silver">
+  <tr>
+    <td><%= Arrangement.attr_name :use_scrap_minimum %></td>
+    <td><%= @customer.current_arrangement.use_scrap_minimum ? 'ja' : 'nej' %></td>
+  </tr>
+  <% if @customer.current_arrangement.use_scrap_minimum %>
+  <tr>
+    <td><%= Arrangement.attr_name :scrap_minimum %></td>
+    <td><%= @customer.current_arrangement.scrap_minimum %></td>
+  </tr>
+  <% end %>
+</table>
+
+<div class="controls">
+  <%= link_to 'Rediger kundeaftale', [:new, @department, @customer, :arrangement] %>
+</div>
+<% end %>
